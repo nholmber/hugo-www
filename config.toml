@@ -1,4 +1,4 @@
-baseurl = ""
+baseurl = "https://nholmber.github.io/"
 languageCode = "en-us"
 defaultContentLanguage = "en-us"
 title = "Nico Holmberg"
