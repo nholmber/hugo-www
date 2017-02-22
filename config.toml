@@ -22,7 +22,7 @@ canonifyurls = true
   #bio = ""
   job = "Doctoral Student, Computational Chemistry"
   location = "Espoo, Finland"
-  picture = "http://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png"
+  picture = "https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png"
   # twitter = ""
   # googlePlus = ""
 
@@ -118,7 +118,7 @@ canonifyurls = true
   # Current image is on AWS S3 and delivered by AWS CloudFront.
   # Otherwise put your image in folder `static/_images/` (development)  or in `source/assets/images/` if you can't or don't want to build the theme,
   # and use relative url : `your-image.png`
-  coverImage = "http://res.cloudinary.com/nholmber/image/upload/v1487095700/sidebar_nefvej.jpg"
+  coverImage = "https://res.cloudinary.com/nholmber/image/upload/v1487095700/sidebar_nefvej.jpg"
 
   # Display an image gallery at the end of a post which have photos variables (false: disabled, true: enabled)
   imageGallery = true
@@ -152,4 +152,4 @@ canonifyurls = true
 
   # Customize copyright value "© 2016 <CUSTOMIZATION>. All Rights Reserved"
   [params.footer]
-    copyright = "Nico Holmberg. Powered by <a href=\"https://gohugo.io\">Hugo</a> and the <a href=\"http://themes.gohugo.io/hugo-tranquilpeak-theme\">Tranquilpeak</a> theme"
+    copyright = "Nico Holmberg. Powered by <a href=\"https://gohugo.io\">Hugo</a> and the <a href=\"https://themes.gohugo.io/hugo-tranquilpeak-theme\">Tranquilpeak</a> theme"
