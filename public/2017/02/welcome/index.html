@@ -47,14 +47,14 @@
     
 
     
-      <meta property="og:image" content="http://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png">
+      <meta property="og:image" content="https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png">
     
 
     
-      <meta property="og:image" content="http://res.cloudinary.com/nholmber/image/upload/v1487771617/welcome-700x185_juytkh.jpg">
+      <meta property="og:image" content="https://res.cloudinary.com/nholmber/image/upload/v1487771617/welcome-700x185_juytkh.jpg">
     
     
-      <meta property="og:image" content="http://res.cloudinary.com/nholmber/image/upload/v1487770746/welcome-1000x667_pxorv7.jpg">
+      <meta property="og:image" content="https://res.cloudinary.com/nholmber/image/upload/v1487770746/welcome-1000x667_pxorv7.jpg">
     
     
 
@@ -103,7 +103,7 @@
     
       <div class="sidebar-profile">
         <a href="https://nholmber.github.io/#about">
-          <img class="sidebar-profile-picture" src="http://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png" alt="Author&#39;s picture" />
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png" alt="Author&#39;s picture" />
         </a>
         <h4 class="sidebar-profile-name">Nico Holmberg</h4>
         
@@ -175,7 +175,7 @@
   <div class="post-header-cover
               text-center
               "
-       style="background-image:url('http://res.cloudinary.com/nholmber/image/upload/v1487770746/welcome-1000x667_pxorv7.jpg')"
+       style="background-image:url('https://res.cloudinary.com/nholmber/image/upload/v1487770746/welcome-1000x667_pxorv7.jpg')"
        data-behavior="5">
     
       <div class="post-header main-content-wrap text-center">
@@ -223,7 +223,7 @@
 
 <p>I intend to keep this blog mostly professional by writing about topics related to my ongoing projects. Currently, I am mainly focusing on the development of new tools to model charge transfer related phenomena, which I have implemented in the versatile open-source software package called <a href="https://www.cp2k.org/"><strong>CP2K</strong></a> (<a href="https://github.com/nholmber" title="GitHub Profile"><i class="fa fa-lg fa-github" style="color:#08b470ff"></i></a>). All of my research projects are intimately linked with <a href="https://en.wikipedia.org/wiki/High-performance_computing">high-performance computing</a>, and I plan on covering this subject in future posts from the perspective of a chemist with no formal background in computer science but with an avid desire to learn. In my first post, however, I will be discussing something entirely unrelated by briefly describing how I created the website that you are currently browsing.</p>
 
-<p>I have virtually no experience in <code>HTML</code>, <code>JavaScript</code>, or web development in general. Among my other duties as a doctoral student, I am nevertheless responsible for maintaining our <a href="http://chemistry.aalto.fi/en/research/computational_chemistry/information/">research group&rsquo;s website</a>. This website, along with the rest of our <a href="http://www.aalto.fi/en/" title="Aalto University">university&rsquo;s</a> website, is built on <a href="https://en.wikipedia.org/wiki/Midgard_(software)">Midgard CMS</a>, a framework where editing and posting content is simple through a <acronym title="What You See Is What You Get">WYSIWYG</acronym> interface, saving me valuable time towards other tasks. While I appreciate the ease of use provided by feature-rich CMS services such as the ever popular <a href="https://wordpress.org/">WordPress</a>, I wanted to go in a different direction with my personal website. At the time of writing this post, my expectations for this website are that it will contain a modest amount of content and that most elements will be <em>static</em> in nature. Primarily for these reasons, I have opted to create a static website rather than a dynamical one. Take a look at this good introductory <a href="http://noahveltman.com/static-dynamic/">article</a> comparing static and dynamic websites if your unfamiliar with the concepts.</p>
+<p>I have virtually no experience in <code>HTML</code>, <code>JavaScript</code>, or web development in general. Among my other duties as a doctoral student, I am nevertheless responsible for maintaining our <a href="https://chemistry.aalto.fi/en/research/computational_chemistry/information/">research group&rsquo;s website</a>. This website, along with the rest of our <a href="https://www.aalto.fi/en/" title="Aalto University">university&rsquo;s</a> website, is built on <a href="https://en.wikipedia.org/wiki/Midgard_(software)">Midgard CMS</a>, a framework where editing and posting content is simple through a <acronym title="What You See Is What You Get">WYSIWYG</acronym> interface, saving me valuable time towards other tasks. While I appreciate the ease of use provided by feature-rich CMS services such as the ever popular <a href="https://wordpress.org/">WordPress</a>, I wanted to go in a different direction with my personal website. At the time of writing this post, my expectations for this website are that it will contain a modest amount of content and that most elements will be <em>static</em> in nature. Primarily for these reasons, I have opted to create a static website rather than a dynamical one. Take a look at this good introductory <a href="http://noahveltman.com/static-dynamic/">article</a> comparing static and dynamic websites if your unfamiliar with the concepts.</p>
 
 <p>In the diverse field of static website generators and hosting solutions, I settled on a combination of <a href="https://gohugo.io/">Hugo</a> and <a href="https://pages.github.com/">GitHub Pages</a>, a choice that was greatly influenced by the current popularity of the combination. The advantages of GitHub are obvious. Besides being free, the website is hosted as a standard GitHub repository like any other programming project, which facilitates easy version controlling, collaborative development via pull requests, and command line deployment of new content. Hugo, on the other hand, is a fast, general-purpose website creation tool written in <a href="https://golang.org/">Go</a> which comes bundled with many nifty features, such as a built-in HTTP server for previewing your website, support for various types of content, and custom themes. For users looking to quickly create a website, setting up a minimal Hugo installation is very simple. Just download a Hugo binary suitable for you OS, browse for a theme of your liking, and that&rsquo;s it &mdash; no dependencies needed! The binary renders all of your content into organized <code>HTML</code> files that form the actual website. Creating new content is also straightforward because every entry is a <a href="https://en.wikipedia.org/wiki/Markdown"><code>Markdown</code></a> document, possibly incorporating Hugo <a href="https://gohugo.io/extras/shortcodes/">shortcodes</a> or snippets of custom <code>HTML</code> code to enable richer content, which can be edited in any text editor. Hosting your Hugo-powered website on GitHub is no hassle either thanks to the availability of a clear <a href="https://gohugo.io/tutorials/github-pages-blog/">step-by-step tutorial</a>.</p>
               
@@ -310,7 +310,7 @@
         </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
-    &copy; 2017 Nico Holmberg. Powered by <a href="https://gohugo.io">Hugo</a> and the <a href="http://themes.gohugo.io/hugo-tranquilpeak-theme">Tranquilpeak</a> theme. All Rights Reserved
+    &copy; 2017 Nico Holmberg. Powered by <a href="https://gohugo.io">Hugo</a> and the <a href="https://themes.gohugo.io/hugo-tranquilpeak-theme">Tranquilpeak</a> theme. All Rights Reserved
   </span>
 </footer>
 
@@ -403,7 +403,7 @@
       <i class="fa fa-remove"></i>
     </div>
     
-      <img id="about-card-picture" src="http://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png" alt="Author&#39;s picture" />
+      <img id="about-card-picture" src="https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png" alt="Author&#39;s picture" />
     
     <h4 id="about-card-name">Nico Holmberg</h4>
     
@@ -476,7 +476,7 @@
     
   
     
-    <div id="cover" style="background-image:url('http://res.cloudinary.com/nholmber/image/upload/v1487095700/sidebar_nefvej.jpg');"></div>
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/nholmber/image/upload/v1487095700/sidebar_nefvej.jpg');"></div>
   
 
 
