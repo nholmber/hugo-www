@@ -3,8 +3,8 @@ languageCode = "en-us"
 defaultContentLanguage = "en-us"
 title = "Nico Holmberg"
 theme = "hugo-tranquilpeak-theme"
-#disqusShortname = "hugo-tranquilpeak-theme"
-# googleAnalytics = "UA-123-45"
+disqusShortname = "nholmber"
+googleAnalytics = "UA-92528914-1"
 paginate = 5
 canonifyurls = true
 
