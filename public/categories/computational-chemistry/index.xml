@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Nico Holmberg</title>
-    <link>https://nholmber.github.io/index.xml</link>
-    <description>Recent content on Nico Holmberg</description>
+    <title>Computational Chemistry on Nico Holmberg</title>
+    <link>https://nholmber.github.io/categories/computational-chemistry/index.xml</link>
+    <description>Recent content in Computational Chemistry on Nico Holmberg</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 26 Apr 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://nholmber.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://nholmber.github.io/categories/computational-chemistry/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Building CP2K on a Cray XC40</title>
@@ -763,113 +762,6 @@ job_max_time=&amp;#34;900&amp;#34;&lt;/pre&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;</description>
-    </item>
-    
-    <item>
-      <title>Archives</title>
-      <link>https://nholmber.github.io/archives/</link>
-      <pubDate>Wed, 22 Feb 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://nholmber.github.io/archives/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Nico Holmberg</title>
-      <link>https://nholmber.github.io/profile/</link>
-      <pubDate>Wed, 22 Feb 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://nholmber.github.io/profile/</guid>
-      <description>
-
-&lt;p&gt;&lt;center&gt;
-  &lt;img src=&#34;https://res.cloudinary.com/nholmber/image/upload/c_scale,w_200/v1487099011/profile-pic-cropped-600x600_vslfp6.png&#34; alt=&#34;Nico Holmberg&#34; title=&#34;Nico Holmberg&#34; /&gt;&lt;br /&gt;
-  &lt;strong&gt;Doctoral Student&lt;/strong&gt;&lt;br /&gt;
-  Computational Quantum Chemistry&lt;br /&gt;
-  Aalto University&lt;br /&gt;
-  &lt;i class=&#34;fa fa fa-map-marker&#34; style=&#34;color:#08b470ff&#34;&gt;&lt;/i&gt; Espoo, Finland&lt;br /&gt;
-  &lt;a href=&#34;mailto:public.nholmber@gmail.com&#34;&gt;&lt;i class=&#34;fa fa-lg fa-envelope&#34; style=&#34;color:#08b470ff&#34;&gt;&lt;/i&gt;&lt;/a&gt;
-  &amp;nbsp;    &lt;a href=&#34;https://www.linkedin.com/in/nicoholmberg/&#34; title=&#34;LinkedIn Profile&#34;&gt;&lt;i class=&#34;fa fa-lg fa-linkedin-square&#34; style=&#34;color:#08b470ff&#34;&gt;&lt;/i&gt;&lt;/a&gt;
-  &amp;nbsp;    &lt;a href=&#34;https://github.com/nholmber&#34; title=&#34;GitHub Profile&#34;&gt;&lt;i class=&#34;fa fa-lg fa-github&#34; style=&#34;color:#08b470ff&#34;&gt;&lt;/i&gt;&lt;/a&gt;
-  &amp;nbsp;    &lt;a href=&#34;https://chemistry.aalto.fi/en/research/computational_chemistry/information/&#34; title=&#34;Research Group Website&#34;&gt;&lt;i class=&#34;fa fa-lg fa-globe&#34; style=&#34;color:#08b470ff&#34;&gt;&lt;/i&gt;&lt;/a&gt;
-  &amp;nbsp;    &lt;a href=&#34;https://research.aalto.fi/portal/nico.holmberg.html&#34; title=&#34;Public Researcher Profile&#34;&gt;&lt;i class=&#34;fa fa-lg fa-user&#34; style=&#34;color:#08b470ff&#34;&gt;&lt;/i&gt;&lt;/a&gt;
-  &amp;nbsp;    &lt;a href=&#34;https://orcid.org/0000-0001-5575-7332&#34; title=&#34;Orcid Researcher Profile&#34;&gt;&lt;img src=&#34;https://orcid.org/sites/default/files/images/orcid_24x24.png&#34; style=&#34;vertical-align:middle; display:inline&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&#34;biography&#34;&gt;Biography&lt;/h1&gt;
-
-&lt;p&gt;Nico Holmberg graduated M.Sc. (Tech) in Chemical Engineering at Aalto University in December 2014, where he subsequently began his doctoral studies. Nico is not your typical chemist working in a laboratory with brightly colored liquids, fancy automated equipment, or anything you might expect from popular TV shows. Instead, his approach to chemistry is more theoretical and involves modeling the interactions between individual atoms, the fundamental building blocks of matter. The biggest tool in his arsenal is a &lt;a href=&#34;https://www.csc.fi/en/-/csc-n-sisu-supertietokone-euroopan-nopeimpien-joukkoon?_82_languageId=en_US&#34;&gt;supercomputer&lt;/a&gt; named after the Finnish national character trait describing perseverance &amp;mdash; &lt;a href=&#34;https://en.wikipedia.org/wiki/Sisu&#34;&gt;&amp;lsquo;Sisu&amp;rsquo;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Nico is a doctoral student at the &lt;a href=&#34;https://chemistry.aalto.fi/en/research/computational_chemistry/information/&#34;&gt;Computational Chemistry research group&lt;/a&gt;. His PhD research focuses on modeling electrochemical phenomena on carbon nanostructures at the electronic structure level using &lt;a href=&#34;https://en.wikipedia.org/wiki/Density_functional_theory&#34;&gt;density functional theory&lt;/a&gt; (DFT). Lately, he has been extending the constrained DFT implementation of &lt;a href=&#34;https://www.cp2k.org/&#34;&gt;CP2K&lt;/a&gt; &amp;mdash; a massively parallel, open-source quantum chemistry program written in Fortran 2003.&lt;/p&gt;
-
-&lt;p&gt;In his free time, Nico enjoys traveling and he is recreational triathlete.&lt;/p&gt;
-
-&lt;h1 id=&#34;education&#34;&gt;Education&lt;/h1&gt;
-
-&lt;ul class=&#34;fa-ul&#34; style=&#34;margin:13px&#34;&gt;
-  &lt;li&gt; &lt;i class=&#34;fa fa-lg fa-graduation-cap&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt; M.Sc. (Tech) in Chemical Engineering (with distinction), 2014 &lt;/li&gt;
-  &lt;li style=&#34;font-size:14px&#34;&gt; &lt;i class=&#34;fa fa-lg fa-graduation-cap&#34; aria-hidden=&#34;true&#34; style=&#34;color:white; font-size:22.5px&#34;&gt;&lt;/i&gt; Aalto University, Finland &lt;/li&gt;
-  &lt;li&gt; &lt;i class=&#34;fa fa-lg fa-graduation-cap&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt; B.Sc. (Tech) in Chemical Engineering (with distinction), 2012 &lt;/li&gt;
-  &lt;li style=&#34;font-size:14px&#34;&gt; &lt;i class=&#34;fa fa-lg fa-graduation-cap&#34; aria-hidden=&#34;true&#34; style=&#34;color:white; font-size:22.5px&#34;&gt;&lt;/i&gt; Aalto University, Finland &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;work-experience&#34;&gt;Work Experience&lt;/h1&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;Date&lt;/th&gt;
-&lt;th align=&#34;center&#34;&gt;Position&lt;/th&gt;
-&lt;th align=&#34;center&#34;&gt;Description&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Dec 2014 &lt;/br&gt; &amp;mdash; Present&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;Doctoral Student, &lt;/br&gt; Aalto University&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;&lt;ul style=&#34;list-style-type:none&#34;&gt;&lt;li&gt; Method development (Fortran/MPI) &lt;a href=&#34;https://github.com/nholmber&#34; title=&#34;GitHub Profile&#34;&gt;&lt;i class=&#34;fa fa-lg fa-github&#34; style=&#34;color:#08b470ff&#34;&gt;&lt;/i&gt;&lt;/a&gt; &lt;/li&gt;&lt;li&gt; Reactivity simulations &lt;/li&gt;&lt;li&gt; Data analysis (Python) &lt;/li&gt;&lt;li&gt; Supervision &amp;amp; teaching of undergrads &lt;/li&gt;&lt;/ul&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Jun 2011 &lt;/br&gt; &amp;mdash; Dec 2014&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;Research Assistant, &lt;/br&gt; Aalto University&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;&lt;ul style=&#34;list-style-type:none&#34;&gt;&lt;li&gt;Dynamic simulations of ion interactions&lt;/li&gt;&lt;li&gt; Data analysis (Python) &lt;/li&gt;&lt;li&gt;Teaching of undergrads&lt;/li&gt;&lt;/ul&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Find out more on &lt;a href=&#34;https://www.linkedin.com/in/nicoholmberg/&#34; title=&#34;LinkedIn Profile&#34;&gt;&lt;i class=&#34;fa fa-lg fa-linkedin-square&#34; style=&#34;color:#08b470ff&#34;&gt;&lt;/i&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;latest-peer-reviewed-publication&#34;&gt;Latest Peer-Reviewed Publication&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Holmberg, Nico&lt;/strong&gt;; Laasonen, Kari; &lt;em&gt;Efficient Constrained Density Functional Theory Implementation for Simulation of Condensed Phase Electron Transfer Reactions&lt;/em&gt;, Journal of Chemical Theory and Computation, 13 (2017), pp 587&amp;ndash;601, &lt;a href=&#34;https://dx.doi.org/10.1021/acs.jctc.6b01085&#34;&gt;online link&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;An exhaustive list of publications with downloadable copies are available on
-&amp;nbsp;    &lt;a href=&#34;https://research.aalto.fi/portal/nico.holmberg.html&#34; title=&#34;Public Researcher Profile&#34;&gt;&lt;i class=&#34;fa fa-lg fa-user&#34; style=&#34;color:#08b470ff&#34;&gt;&lt;/i&gt;&lt;/a&gt;
-&amp;nbsp;    &lt;a href=&#34;https://orcid.org/0000-0001-5575-7332&#34; title=&#34;Orcid Researcher Profile&#34;&gt;&lt;img src=&#34;https://orcid.org/sites/default/files/images/orcid_24x24.png&#34; style=&#34;vertical-align:middle; display:inline&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Welcome to my website!</title>
-      <link>https://nholmber.github.io/2017/02/welcome/</link>
-      <pubDate>Wed, 22 Feb 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://nholmber.github.io/2017/02/welcome/</guid>
-      <description>&lt;p&gt;Greetings and welcome! You have stumbled upon the personal website and blog of Nico Holmberg, a 26 year old Finn pursuing a doctoral degree in Computational Quantum Chemistry. Feel free to check out my &lt;a href=&#34;../../../profile&#34;&gt;profile&lt;/a&gt; for more information about me, my professional projects and other interests!
-&lt;/p&gt;
-
-&lt;p&gt;I intend to keep this blog mostly professional by writing about topics related to my ongoing projects. Currently, I am mainly focusing on the development of new tools to model charge transfer related phenomena, which I have implemented in the versatile open-source software package called &lt;a href=&#34;https://www.cp2k.org/&#34;&gt;&lt;strong&gt;CP2K&lt;/strong&gt;&lt;/a&gt; (&lt;a href=&#34;https://github.com/nholmber&#34; title=&#34;GitHub Profile&#34;&gt;&lt;i class=&#34;fa fa-lg fa-github&#34; style=&#34;color:#08b470ff&#34;&gt;&lt;/i&gt;&lt;/a&gt;). All of my research projects are intimately linked with &lt;a href=&#34;https://en.wikipedia.org/wiki/High-performance_computing&#34;&gt;high-performance computing&lt;/a&gt;, and I plan on covering this subject in future posts from the perspective of a chemist with no formal background in computer science but with an avid desire to learn. In my first post, however, I will be discussing something entirely unrelated by briefly describing how I created the website that you are currently browsing.&lt;/p&gt;
-
-&lt;p&gt;I have virtually no experience in &lt;code&gt;HTML&lt;/code&gt;, &lt;code&gt;JavaScript&lt;/code&gt;, or web development in general. Among my other duties as a doctoral student, I am nevertheless responsible for maintaining our &lt;a href=&#34;https://chemistry.aalto.fi/en/research/computational_chemistry/information/&#34;&gt;research group&amp;rsquo;s website&lt;/a&gt;. This website, along with the rest of our &lt;a href=&#34;https://www.aalto.fi/en/&#34; title=&#34;Aalto University&#34;&gt;university&amp;rsquo;s&lt;/a&gt; website, is built on &lt;a href=&#34;https://en.wikipedia.org/wiki/Midgard_(software)&#34;&gt;Midgard CMS&lt;/a&gt;, a framework where editing and posting content is simple through a &lt;acronym title=&#34;What You See Is What You Get&#34;&gt;WYSIWYG&lt;/acronym&gt; interface, saving me valuable time towards other tasks. While I appreciate the ease of use provided by feature-rich CMS services such as the ever popular &lt;a href=&#34;https://wordpress.org/&#34;&gt;WordPress&lt;/a&gt;, I wanted to go in a different direction with my personal website. At the time of writing this post, my expectations for this website are that it will contain a modest amount of content and that most elements will be &lt;em&gt;static&lt;/em&gt; in nature. Primarily for these reasons, I have opted to create a static website rather than a dynamical one. Take a look at this good introductory &lt;a href=&#34;http://noahveltman.com/static-dynamic/&#34;&gt;article&lt;/a&gt; comparing static and dynamic websites if your unfamiliar with the concepts.&lt;/p&gt;
-
-&lt;p&gt;In the diverse field of static website generators and hosting solutions, I settled on a combination of &lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; and &lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub Pages&lt;/a&gt;, a choice that was greatly influenced by the current popularity of the combination. The advantages of GitHub are obvious. Besides being free, the website is hosted as a standard GitHub repository like any other programming project, which facilitates easy version controlling, collaborative development via pull requests, and command line deployment of new content. Hugo, on the other hand, is a fast, general-purpose website creation tool written in &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt; which comes bundled with many nifty features, such as a built-in HTTP server for previewing your website, support for various types of content, and custom themes. For users looking to quickly create a website, setting up a minimal Hugo installation is very simple. Just download a Hugo binary suitable for you OS, browse for a theme of your liking, and that&amp;rsquo;s it &amp;mdash; no dependencies needed! The binary renders all of your content into organized &lt;code&gt;HTML&lt;/code&gt; files that form the actual website. Creating new content is also straightforward because every entry is a &lt;a href=&#34;https://en.wikipedia.org/wiki/Markdown&#34;&gt;&lt;code&gt;Markdown&lt;/code&gt;&lt;/a&gt; document, possibly incorporating Hugo &lt;a href=&#34;https://gohugo.io/extras/shortcodes/&#34;&gt;shortcodes&lt;/a&gt; or snippets of custom &lt;code&gt;HTML&lt;/code&gt; code to enable richer content, which can be edited in any text editor. Hosting your Hugo-powered website on GitHub is no hassle either thanks to the availability of a clear &lt;a href=&#34;https://gohugo.io/tutorials/github-pages-blog/&#34;&gt;step-by-step tutorial&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
     
   </channel>
