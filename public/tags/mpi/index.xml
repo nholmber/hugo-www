@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Cp2k on Nico Holmberg</title>
-    <link>https://nholmber.github.io/tags/cp2k/</link>
-    <description>Recent content in Cp2k on Nico Holmberg</description>
+    <title>Mpi on Nico Holmberg</title>
+    <link>https://nholmber.github.io/tags/mpi/</link>
+    <description>Recent content in Mpi on Nico Holmberg</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 04 May 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://nholmber.github.io/tags/cp2k/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://nholmber.github.io/tags/mpi/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -20,16 +20,6 @@
       <description>&lt;p&gt;Lately, parsing volumetric data from large (&amp;gt; 300 MB) text files has been a computational bottleneck in my simulations. Because I expect to be processing hundreds of these files, I decided to parallelize the parser routine by leveraging the &lt;a href=&#34;https://en.wikipedia.org/wiki/Message_Passing_Interface&#34;&gt;message passing interface&lt;/a&gt; (MPI). I will describe my first experience with MPI I/O in this post by going through the synthesis process of the parallelized parser routine. I will also examine the performance of the parallel parser.&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Building CP2K on a Cray XC40</title>
-      <link>https://nholmber.github.io/2017/04/cp2k-build-cray-xc40/</link>
-      <pubDate>Wed, 26 Apr 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://nholmber.github.io/2017/04/cp2k-build-cray-xc40/</guid>
-      <description>&lt;p&gt;Compiling a &lt;a href=&#34;https://www.cp2k.org/&#34;&gt;CP2K&lt;/a&gt; binary &amp;ndash; the massively parallel, open-source quantum chemistry and solid state physics program written in Fortran 2003 &amp;ndash; can be a daunting task if you&amp;rsquo;ve never built a large project using &lt;a href=&#34;https://en.wikipedia.org/wiki/Make_(software)&#34;&gt;maketools&lt;/a&gt;. This post aims to demystify the build process by showcasing a full CP2K build on a Cray XC40 supercomputer (codename &lt;a href=&#34;https://research.csc.fi/sisu-supercomputer&#34;&gt;&lt;em&gt;Sisu&lt;/em&gt;&lt;/a&gt;) including dependencies.
-&lt;/p&gt;</description>
     </item>
     
   </channel>

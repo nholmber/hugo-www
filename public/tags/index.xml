@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Nico Holmberg</title>
+    <link>https://nholmber.github.io/tags/</link>
+    <description>Recent content in Tags on Nico Holmberg</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 04 May 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://nholmber.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Computational Chemistry</title>
+      <link>https://nholmber.github.io/tags/computational-chemistry/</link>
+      <pubDate>Thu, 04 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/tags/computational-chemistry/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Cp2k</title>
+      <link>https://nholmber.github.io/tags/cp2k/</link>
+      <pubDate>Thu, 04 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/tags/cp2k/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Github</title>
+      <link>https://nholmber.github.io/tags/github/</link>
+      <pubDate>Wed, 22 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/tags/github/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hugo</title>
+      <link>https://nholmber.github.io/tags/hugo/</link>
+      <pubDate>Wed, 22 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/tags/hugo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mpi</title>
+      <link>https://nholmber.github.io/tags/mpi/</link>
+      <pubDate>Thu, 04 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/tags/mpi/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

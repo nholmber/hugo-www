@@ -2,11 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>2017 02 on Nico Holmberg</title>
-    <link>https://nholmber.github.io/archives/2017-02/index.xml</link>
+    <link>https://nholmber.github.io/archives/2017-02/</link>
     <description>Recent content in 2017 02 on Nico Holmberg</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="https://nholmber.github.io/archives/2017-02/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 22 Feb 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://nholmber.github.io/archives/2017-02/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Welcome to my website!</title>
@@ -15,13 +18,7 @@
       
       <guid>https://nholmber.github.io/2017/02/welcome/</guid>
       <description>&lt;p&gt;Greetings and welcome! You have stumbled upon the personal website and blog of Nico Holmberg, a 26 year old Finn pursuing a doctoral degree in Computational Quantum Chemistry. Feel free to check out my &lt;a href=&#34;../../../profile&#34;&gt;profile&lt;/a&gt; for more information about me, my professional projects and other interests!
-&lt;/p&gt;
-
-&lt;p&gt;I intend to keep this blog mostly professional by writing about topics related to my ongoing projects. Currently, I am mainly focusing on the development of new tools to model charge transfer related phenomena, which I have implemented in the versatile open-source software package called &lt;a href=&#34;https://www.cp2k.org/&#34;&gt;&lt;strong&gt;CP2K&lt;/strong&gt;&lt;/a&gt; (&lt;a href=&#34;https://github.com/nholmber&#34; title=&#34;GitHub Profile&#34;&gt;&lt;i class=&#34;fa fa-lg fa-github&#34; style=&#34;color:#08b470ff&#34;&gt;&lt;/i&gt;&lt;/a&gt;). All of my research projects are intimately linked with &lt;a href=&#34;https://en.wikipedia.org/wiki/High-performance_computing&#34;&gt;high-performance computing&lt;/a&gt;, and I plan on covering this subject in future posts from the perspective of a chemist with no formal background in computer science but with an avid desire to learn. In my first post, however, I will be discussing something entirely unrelated by briefly describing how I created the website that you are currently browsing.&lt;/p&gt;
-
-&lt;p&gt;I have virtually no experience in &lt;code&gt;HTML&lt;/code&gt;, &lt;code&gt;JavaScript&lt;/code&gt;, or web development in general. Among my other duties as a doctoral student, I am nevertheless responsible for maintaining our &lt;a href=&#34;https://chemistry.aalto.fi/en/research/computational_chemistry/information/&#34;&gt;research group&amp;rsquo;s website&lt;/a&gt;. This website, along with the rest of our &lt;a href=&#34;https://www.aalto.fi/en/&#34; title=&#34;Aalto University&#34;&gt;university&amp;rsquo;s&lt;/a&gt; website, is built on &lt;a href=&#34;https://en.wikipedia.org/wiki/Midgard_(software)&#34;&gt;Midgard CMS&lt;/a&gt;, a framework where editing and posting content is simple through a &lt;acronym title=&#34;What You See Is What You Get&#34;&gt;WYSIWYG&lt;/acronym&gt; interface, saving me valuable time towards other tasks. While I appreciate the ease of use provided by feature-rich CMS services such as the ever popular &lt;a href=&#34;https://wordpress.org/&#34;&gt;WordPress&lt;/a&gt;, I wanted to go in a different direction with my personal website. At the time of writing this post, my expectations for this website are that it will contain a modest amount of content and that most elements will be &lt;em&gt;static&lt;/em&gt; in nature. Primarily for these reasons, I have opted to create a static website rather than a dynamical one. Take a look at this good introductory &lt;a href=&#34;http://noahveltman.com/static-dynamic/&#34;&gt;article&lt;/a&gt; comparing static and dynamic websites if your unfamiliar with the concepts.&lt;/p&gt;
-
-&lt;p&gt;In the diverse field of static website generators and hosting solutions, I settled on a combination of &lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; and &lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub Pages&lt;/a&gt;, a choice that was greatly influenced by the current popularity of the combination. The advantages of GitHub are obvious. Besides being free, the website is hosted as a standard GitHub repository like any other programming project, which facilitates easy version controlling, collaborative development via pull requests, and command line deployment of new content. Hugo, on the other hand, is a fast, general-purpose website creation tool written in &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt; which comes bundled with many nifty features, such as a built-in HTTP server for previewing your website, support for various types of content, and custom themes. For users looking to quickly create a website, setting up a minimal Hugo installation is very simple. Just download a Hugo binary suitable for you OS, browse for a theme of your liking, and that&amp;rsquo;s it &amp;mdash; no dependencies needed! The binary renders all of your content into organized &lt;code&gt;HTML&lt;/code&gt; files that form the actual website. Creating new content is also straightforward because every entry is a &lt;a href=&#34;https://en.wikipedia.org/wiki/Markdown&#34;&gt;&lt;code&gt;Markdown&lt;/code&gt;&lt;/a&gt; document, possibly incorporating Hugo &lt;a href=&#34;https://gohugo.io/extras/shortcodes/&#34;&gt;shortcodes&lt;/a&gt; or snippets of custom &lt;code&gt;HTML&lt;/code&gt; code to enable richer content, which can be edited in any text editor. Hosting your Hugo-powered website on GitHub is no hassle either thanks to the availability of a clear &lt;a href=&#34;https://gohugo.io/tutorials/github-pages-blog/&#34;&gt;step-by-step tutorial&lt;/a&gt;.&lt;/p&gt;</description>
+&lt;/p&gt;</description>
     </item>
     
   </channel>
