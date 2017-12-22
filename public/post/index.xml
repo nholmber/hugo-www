@@ -12,6 +12,17 @@
     
     
     <item>
+      <title>Constrained DFT tutorial at the CP2K-UK 2018 meeting</title>
+      <link>https://nholmber.github.io/2017/12/cp2k-uk-2018/</link>
+      <pubDate>Fri, 22 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/2017/12/cp2k-uk-2018/</guid>
+      <description>&lt;p&gt;I will be giving an introductory how-to talk on constrained DFT at the &lt;a href=&#34;https://tinyurl.com/CP2K-2018&#34;&gt;2018 CP2K UK User meeting&lt;/a&gt; at the University of Lincoln, UK, on Friday January 12 2018.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer</title>
       <link>https://nholmber.github.io/2017/12/mpi-io-cube-pt2/</link>
       <pubDate>Fri, 22 Dec 2017 00:00:00 +0000</pubDate>
