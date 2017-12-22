@@ -1,5 +1,5 @@
 +++
-tags = ["CP2K", "MPI", "computational chemistry"]
+tags = ["CP2K", "MPI", "computational chemistry", "high-performance computing"]
 categories = ["parallel programming"]
 archives = ["2017-05"]
 date = "2017-05-04"
