@@ -1,0 +1,973 @@
+
+
+  
+    
+  
+
+
+  
+
+
+
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.26">
+    <title>Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer</title>
+    <meta name="author" content="Nico Holmberg">
+    <meta name="keywords" content="MPI, computational chemistry, DataWarp, SSD">
+
+    <link rel="icon" href="https://nholmber.github.io/favicon.png">
+    
+
+    
+    <meta name="description" content="In my previous post, I discussed the benefits of using the message passing interface (MPI) to parse large data files in parallel over multiple processors. In today&rsquo;s post, I will demonstrate how MPI I/O operations can be further accelerated by introducing the concept of hints. The second topic I will discuss is the emergence of solid-state drives in high-performance computing systems to resolve I/O bottlenecks. These topics will be illustrated by benchmark calculations using a parallel writer routine that I will implement to the task described previously.
+
+">
+    <meta property="og:description" content="In my previous post, I discussed the benefits of using the message passing interface (MPI) to parse large data files in parallel over multiple processors. In today&rsquo;s post, I will demonstrate how MPI I/O operations can be further accelerated by introducing the concept of hints. The second topic I will discuss is the emergence of solid-state drives in high-performance computing systems to resolve I/O bottlenecks. These topics will be illustrated by benchmark calculations using a parallel writer routine that I will implement to the task described previously.
+
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer">
+    <meta property="og:url" content="/2017/12/mpi-io-cube-pt2/">
+    <meta property="og:site_name" content="Nico Holmberg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nico Holmberg">
+    <meta name="twitter:description" content="In my previous post, I discussed the benefits of using the message passing interface (MPI) to parse large data files in parallel over multiple processors. In today&rsquo;s post, I will demonstrate how MPI I/O operations can be further accelerated by introducing the concept of hints. The second topic I will discuss is the emergence of solid-state drives in high-performance computing systems to resolve I/O bottlenecks. These topics will be illustrated by benchmark calculations using a parallel writer routine that I will implement to the task described previously.
+
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png">
+    
+
+    
+      <meta property="og:image" content="https://nholmber.github.io/false">
+    
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" />
+    
+    
+    <link rel="stylesheet" href="https://nholmber.github.io/css/style-gwlo24d2hxipxk8bi1sxik0zhlpn9t7ebcmgp9kubmmcjfzlavuyhvbqumhn.min.css" />
+    
+    
+    
+      
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-92528914-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://nholmber.github.io/">Nico Holmberg</a>
+  </div>
+  <link rel="shortcut icon" href="https://nholmber.github.io/favicon.ico?v=kPP08pKEXB" type="image/x-icon" />
+  
+    
+      <a class="header-right-picture "
+         href="https://nholmber.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/nholmber/image/upload/v1487079940/logo-circle-500x500_ap480i.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://nholmber.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Nico Holmberg</h4>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/profile">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-user"></i>
+      
+      <span class="sidebar-button-desc">Profile</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+    </ul>
+    <ul class="sidebar-buttons">
+      
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer
+    </h1>
+  
+  <div class="postShorten-meta post-meta">
+  
+    <time itemprop="datePublished" datetime="2017-12-22T00:00:00Z">
+      
+  December 22, 2017
+
+    </time>
+  
+  
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://nholmber.github.io/categories/parallel-programming">parallel programming</a>
+    
+  
+
+
+</div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>In my previous <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">post</a>, I discussed the benefits of using the message passing interface (MPI) to parse large data files in parallel over multiple processors. In today&rsquo;s post, I will demonstrate how MPI I/O operations can be further accelerated by introducing the concept of hints. The second topic I will discuss is the emergence of solid-state drives in high-performance computing systems to resolve I/O bottlenecks. These topics will be illustrated by benchmark calculations using a parallel writer routine that I will implement to the <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">task described previously</a>.</p>
+
+<p></p>
+
+<h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
+<ul>
+<li><a href="#implementing-the-parallel-writer-routine">Implementing the parallel writer routine</a></li>
+<li><a href="#high-performance-computing-traditional-hdd-vs-ssd">High-performance computing: traditional HDD vs SSD</a></li>
+<li><a href="#performance-analysis-parallel-vs-serial-writer-routine">Performance analysis: parallel vs serial writer routine</a></li>
+<li><a href="#fine-tuning-mpi-i-o-performance-with-hints">Fine tuning MPI I/O performance with hints</a></li>
+<li><a href="#conclusions">Conclusions</a></li>
+</ul>
+</nav>
+
+<h1 id="implementing-the-parallel-writer-routine">Implementing the parallel writer routine</h1>
+
+<p>To recap, our goal is to output the values of a function <code>f(x,y,z)</code> to disk in Gaussian cube file format. The values of this function are known on a discrete, rectangular three dimensional grid with each processor holding only a small subset of the total number of function values.</p>
+
+<p>The task of writing a cube file in parallel is essentially identical to reading the data in parallel, which was discussed in depth in my previous <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">post</a>. Here, I will therefore only be giving an outline of the parallelized writer routine. You can find the full code <a href="https://github.com/cp2k/cp2k/blob/master/cp2k/src/pw/realspace_grid_cube.F#L623-L624">here</a> if you are interested.</p>
+
+<ul>
+<li>Open file in parallel (emulating file actions such as &lsquo;replace&rsquo; with other MPI routines)</li>
+<li>Write header lines on master process</li>
+<li>Determine where each processor needs to write its data <em>i.e</em> determine byte offsets for the processor-dependent data slices</li>
+<li>Convert data to correct format (float to string)</li>
+<li>Use calculated byte offsets as a file view</li>
+<li>Output data in parallel using collective MPI write routine</li>
+<li>Close file</li>
+</ul>
+
+<h1 id="high-performance-computing-traditional-hdd-vs-ssd">High-performance computing: traditional HDD vs SSD</h1>
+
+<p>Modern computers are nowadays often equipped with both a hard disk drive (HDD) and a solid-state drive (SSD). The latter offers superior read/write performance and physical durability at the expense of higher cost and shorter data longevity (arguable given how often consumers replace their computer with a new one). To get the best of worlds, it is advantageous to use a SSD to store the computer&rsquo;s operating system and frequently used programs to improve load up times, while other, less accessed data such as images are stored on the HDD.</p>
+
+<p>In the high-performance computing world, SSDs are still relatively rare. The limited read/write longevity of SSDs becomes a real issue for data-intensive computing centers, and it is unrealistic to transition from HDD-only systems to SSD-only systems despite the gain in I/O performance. The I/O performance of HDDs is actually quite impressive in a high-performance computing setting for large files because the files are split (striped) over many disks via the parallel file system. <a href="http://www.nersc.gov/users/computational-systems/cori/file-storage-and-i-o/">NERSC, for example, reports a peak I/O performance of over 700 GB/s for their Cray XC40 supercomputer Cori</a>. Noticeable slow downs are experienced when the system is under high I/O load or when data is accessed frequently in small chunks. This is where SSDs come into the picture, not as the final storage location of all computing data, but as a fast buffer drive intended to absorb peak I/O loads.</p>
+
+<p>Cray has named their SSD architecture Burst Buffer which reflects its intended purpose. The Burst Buffer nodes can be utilized in a number of ways. In the simplest case, all temporary files that are created during a simulation but destroyed afterwards are written to and subsequently read from the SSDs. Permanent input or output data can also be read/written on the Burst Buffer nodes by staging in/out the files from the HDD parallel file system. In practice, an output file would first get written to the SSDs and then moved (staged out) to the HDDs when the allocated computing time runs out. If your simulation suffers from I/O bottlenecks this strategy might significantly reduce the run time of your code because the slow HDD I/O is disentangled from the actual computation phase.</p>
+
+<p>The Burst Buffer nodes are controlled by the DataWarp software which determines <em>e.g.</em> in which operating mode the nodes are used and how many nodes the files are striped over. The software also integrates the Burst Buffers nodes with the workload manager and other parts of the computing environment. You can find more detailed information about the Burst Buffer architecture at this <a href="https://sites.google.com/lbl.gov/burstbuffers">NERSC website</a>. I would especially recommend the SC17 tutorial that includes numerous example use cases and tips for tuning I/O performance.</p>
+
+<h1 id="performance-analysis-parallel-vs-serial-writer-routine">Performance analysis: parallel vs serial writer routine</h1>
+
+<p>I have compared the performance of the parallel and serial routines for writing out Gaussian cube files on the same Cray XC40 machine that I used in my previous post. Because this machine offers Burst Buffer nodes with a total capacity of 36 TB, I have also decided to test whether using the SSDs results in any further performance increase. I will be using two Gaussian cube sizes of 264 × 264 × 264 and 693 × 693 × 693 data points resulting in file sizes of roughly 230 MB and 4.1 GB, respectively. The latter example is slightly exaggerated in size compared to the typical 1-2 GB file sizes that I process in my work to better investigate the effects of using Burst Buffer nodes. The reported timings correspond to the total time needed to write 2 equal sized cube files (containing the numerical values of the electron and spin densities in the tested systems) using the CP2K quantum chemistry code, where the parallel writer routine has been implemented. All MPI I/O settings have been left at their default values. The effect of changing these settings will be explored in the next section. A single Burst Buffer node has been employed in the corresponding tests.</p>
+
+<p>Before proceeding, I would like to note that comparing the I/O performance of the Burst Buffer nodes and the standard parallel file system is difficult due to the following reasons. Firstly, the tested file sizes are very small compared <em>e.g</em> to the &gt;100 GB data sets highlighted in the <a href="https://sites.google.com/lbl.gov/burstbuffers">NERSC tutorials</a>. Secondly, the I/O performance is very sensitive to the instantaneous load of the computing system which might vary considerably even on short timescales because the system is in use by other users. Therefore, although all benchmark simulations were executed in consecutive jobs, the timing data should be interpreted with caution.</p>
+
+<p>Let&rsquo;s first take a look at the timing data for the smaller Gaussian cube files. The performance of the serial and parallel routines is compared in Figure 1 as a function of the total number of MPI processes.</p>
+
+<p><img src="https://res.cloudinary.com/nholmber/image/upload/v1513770708/mpi_io_write_serialvsparallel_jhqx5m.png" alt="Parallel vs serial write performance for smaller cube file" />
+<strong>Figure 1.</strong> Parallel vs serial write performance for outputting two Gaussian cube files of size 230 MB as a function of the total number of MPI processes.</p>
+
+<p>The benefits of using MPI I/O to output the cube file in parallel are immediately obvious from the above figure. The parallel writer is faster roughly by a factor of 10. Additionally, the time needed by the parallel routine decreases as the number of MPI processes is increased, whereas the opposite behavior is observed for the serial routine. It is not actually the I/O that is getting faster, which is constant at 0.5 seconds, but instead it is the data conversion and other supporting tasks that are accelerated as each processor holds an ever decreasing number of function values. Using Burst Buffer SSD nodes does not improve I/O performance for this particular data set.</p>
+
+<p>To see if there is any advantage to using the Burst Buffer nodes, let&rsquo;s next consider the larger Gaussian cube files. In the following, I shall only use the parallel writer routine because it clearly outperforms the serial version. The timing data with and without Burst Buffer are reported in Figure 2.</p>
+
+<p><img src="https://res.cloudinary.com/nholmber/image/upload/v1513773328/mpi_io_write_para_c4fj9a.png" alt="Write performance for larger cube file with and without Burst Buffer SSD nodes" />
+<strong>Figure 2.</strong> Timing data for writing two 4.1 GB Gaussian cube files with and without Burst Buffer (BB) SSD nodes. At left, the total time taken by the writer routine including data conversion, other supporting tasks and I/O. At right, the time spent in the collective MPI write routine <em>MPI_File_Write_all</em>.</p>
+
+<p>Focusing first on the total time spent in the routine writing the cube files (Figure 2 at left), it is evident that using the Burst Buffer SSD nodes is beneficial with 192 or 288 MPI processes, but the advantage is lost when the number of MPI processes is further increased to 384. The highest performance improvement, 30 %, is reached with the lowest tested MPI process count. As discussed above in relation to Figure 1, the total time needed to output the files should decrease up to some limit as the number of MPI processes is increased if the I/O performance remains constant. This is unexpectedly not the case when the Burst Buffer nodes are employed.</p>
+
+<p>The cause for this behavior can be understood by separately examining the timings of the collective MPI write calls (<em>MPI_File_Write_all</em>), which are reported in Figure 2 at right. This figure reveals that the file write is progressively slower on the Burst Buffer nodes the more MPI processes are in use, whereas the opposite holds for the standard I/O nodes. Overall, the differences on the Burst Buffer nodes are however quite small and it is entirely possible that they are merely the result of fluctuating load on the supercomputer. We can try to improve the I/O performance further by taking a more detailed look at the how the collective I/O operations are implemented, which will be the focus of the next section.</p>
+
+<h1 id="fine-tuning-mpi-i-o-performance-with-hints">Fine tuning MPI I/O performance with hints</h1>
+
+<p>In collective MPI I/O (routines ending with <em>_all</em>), all MPI processes within a communicator group do not necessarily participate in the I/O operations. Instead, the MPI library may heuristically decide to switch on <em>collective buffering</em> where special aggregator processes handle all I/O. These aggregators are responsible for distributing/collecting the data to/from the other MPI processes (communication phase). The advantage of collective buffering is that the data gets written and read in larger chunks instead of repeated small requests which hurts performance.</p>
+
+<p>The number of aggregators among other MPI I/O settings can be controlled with environment variables or so-called <em>hints</em>. These hints can be set on a file per file basis. It is also possible to get highly detailed timing data for every file accessed with MPI I/O, which is helpful when MPI I/O settings are altered in an attempt to enhance I/O performance. For example, the following environment variables would display all settings related to the MPI and MPI I/O environments as well as switch on MPI I/O performance reports on Cray with MPICH.</p>
+
+
+  
+  
+  
+  
+
+
+<figure class="highlight bash">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="bash code-highlight">export MPICH_ENV_DISPLAY=1
+export MPICH_MPIIO_HINTS_DISPLAY=1
+export MPICH_MPIIO_STATS=1
+export MPICH_MPIIO_TIMERS=1</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>The list of available hints and their default values on Cray with the Lustre parallel file system are the following:</p>
+
+
+  
+  
+  
+  
+
+
+<figure class="highlight bash">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="bash code-highlight">PE 0: MPIIO hints for large-cube-SPIN_DENSITY-1_0.cube:
+          cb_buffer_size           = 16777216
+          romio_cb_read            = automatic
+          romio_cb_write           = automatic
+          cb_nodes                 = 1
+          cb_align                 = 2
+          romio_no_indep_rw        = false
+          romio_cb_pfr             = disable
+          romio_cb_fr_types        = aar
+          romio_cb_fr_alignment    = 1
+          romio_cb_ds_threshold    = 0
+          romio_cb_alltoall        = automatic
+          ind_rd_buffer_size       = 4194304
+          ind_wr_buffer_size       = 524288
+          romio_ds_read            = disable
+          romio_ds_write           = disable
+          striping_factor          = 1
+          striping_unit            = 1048576
+          romio_lustre_start_iodevice = 0
+          direct_io                = false
+          aggregator_placement_stride = -1
+          abort_on_rw_error        = disable
+          cb_config_list           = *:*
+          romio_filesystem_type    = CRAY ADIO:</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>The hints <code>romio_cb_*</code> and <code>cb_*</code> define the collective buffering settings. For example, above the hints <code>romio_cb_read</code> and <code>romio_cb_write</code> are both set to automatic which allows the library to decide whether collective buffering should be used on a file per file basis. The number of aggregators is 1 as defined by the hint <code>cb_nodes</code>. The other hints have been explained <a href="http://www.idris.fr/media/docs/docu/idris/idris_patc_hints_proj.pdf">here</a> or in the MPI manual page available with <code>man mpi</code>.</p>
+
+<p>An example of the timing report produced by the environment variable <code>MPICH_MPIIO_HINTS_DISPLAY=1</code> is given below. The report corresponds to writing out one of the 4.1 GB Gaussian cube files with 192 MPI processes and no Burst Buffer nodes.</p>
+
+
+  
+  
+  
+  
+
+
+<figure class="highlight bash">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="bash code-highlight">&#43;--------------------------------------------------------&#43;
+| MPIIO write access patterns for large-cube-SPIN_DENSITY-1_0.cube
+|   independent writes      = 106
+|   collective writes       = 192
+|   independent writers     = 1
+|   aggregators             = 1
+|   stripe count            = 1
+|   stripe size             = 1048576
+|   system writes           = 4286
+|   aggregators active      = 192,0,0,0 (1, &lt;= 1, &gt; 1, 1)
+|   total bytes for writes  = 4382277718 = 4179 MiB = 4 GiB
+|   ave system write size   = 1022463
+|   read-modify-write count = 0
+|   read-modify-write bytes = 0
+|   number of write gaps    = 0
+|   ave write gap size      = NA
+| See &#34;Optimizing MPI I/O on Cray XE Systems&#34; S-0013-20 for explanations.
+&#43;--------------------------------------------------------&#43;
+&#43;--------------------------------------------------------------------------&#43;
+| MPIIO write by phases, all ranks, for large-cube-SPIN_DENSITY-1_0.cube
+|   number of ranks writing        =     1
+|   number of ranks not writing    =   191
+|                                          min         max         ave
+|                                    ----------  ----------  ----------
+|   open/close/trunc  time         =       0.00        0.00        0.00
+|
+|   time scale: 1 = 2**4     clock ticks    min         max         ave
+|                                    ----------  ----------  ---------- ---
+|   total                          =                          760329267
+|
+|   imbalance                      =       1923        2566        2346  0%
+|   open/close/trunc               =     247135      302731      251846  0%
+|   local compute                  =      92757      213092       97163  0%
+|   wait for coll                  =      14746   752303980   398433146 52%
+|   collective                     =      28706       35441       30597  0%
+|   exchange/write                 =     373415     2146029      398483  0%
+|   data send (*)                  =    7189592   759376475   357649987 47%
+|   file write                     =          0   656363834   656363834 86%
+|   other                          =       5582       48380       47134  0%
+|
+|   data send BW (MiB/s)           =                           1899.597
+|   raw write BW (MiB/s)           =                           1035.084
+|   net write BW (MiB/s)           =                            893.550
+|
+| (*) send and write overlap when number ranks != number of writers
+&#43;--------------------------------------------------------------------------&#43;</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>The report confirms that indeed only one MPI aggregator was in use and that it achieved a net write bandwidth of 893.550 MiB/s. The report also shows the number of independent (the header lines) and collective (the function value data) writes, the total number of writes and their average size, as well as various other information. The user can try to enhance MPI I/O performance by overriding some of the default settings. MPI I/O hints can be passed to a program through the environment variable <code>MPICH_MPIIO_HINTS</code>. For example, the number of MPI aggregators can be increased to 8 for any Gaussian cube file with suffix <code>.cube</code> by setting the following hint</p>
+
+
+  
+  
+  
+  
+
+
+<figure class="highlight bash">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="bash code-highlight">export MPICH_MPIIO_HINTS=&#34;*.cube:cb_nodes=8&#34;</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>It is a simple matter to systematically test whether changing any MPI I/O setting improves performance. The same simulation just needs to be rerun multiple times with different hints and averaged over multiple simulations with the hints fixed to get more reliable statistics of the write bandwidth.</p>
+
+<p>The number of MPI aggregators is one of the crucial variables to test when using collective I/O operations. Other high priority variables to test have been suggested in this <a href="http://www.idris.fr/media/docs/docu/idris/idris_patc_hints_proj.pdf">presentation</a>. Table 1 shows how the net write bandwidth changes as the number of MPI aggregators is varied between 1 and 192 (implying no collective buffering) when a total of 192 MPI processes are used to write a 4.1 GB Gaussian cube file. The results suggest that better write performance could be achieved by increasing the number of aggregators to 64 from the default value of 1. The improvement is due to better balancing of the time spent communicating and actually writing the data.</p>
+
+<p><strong>Table 1.</strong> Net write bandwidth as the function of the number of MPI aggregators for writing a 4.1 GB cube file to disk on 192 MPI processes.</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">Number of MPI aggregators</th>
+<th align="center">Net write bandwidth (MiB/s)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">1</td>
+<td align="center">893.6</td>
+</tr>
+
+<tr>
+<td align="left">2</td>
+<td align="center">175.3</td>
+</tr>
+
+<tr>
+<td align="left">8</td>
+<td align="center">434.2</td>
+</tr>
+
+<tr>
+<td align="left">24</td>
+<td align="center">601.5</td>
+</tr>
+
+<tr>
+<td align="left">48</td>
+<td align="center">418.6</td>
+</tr>
+
+<tr>
+<td align="left">64</td>
+<td align="center">1161.6</td>
+</tr>
+
+<tr>
+<td align="left">96</td>
+<td align="center">186.4</td>
+</tr>
+
+<tr>
+<td align="left">192</td>
+<td align="center">436.4</td>
+</tr>
+</tbody>
+</table>
+
+<p>Some additional control settings become available when Burst Buffer SSD nodes are used. The most important setting is the number Burst Buffer nodes which controls how many physical SSDs the output file is striped over. This setting is equivalent to the hint <code>string_factor</code> on the Lustre parallel file system. All Burst Buffer settings are controlled through DataWarp. To change the number Burst Buffer nodes, we must first find out the size of each SSD:</p>
+
+
+  
+  
+  
+  
+
+
+<figure class="highlight bash">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="bash code-highlight">nholmber@sisu-login2 /work/nholmber/Test/IO &gt;&gt;&gt; scontrol show burst
+	Name=cray DefaultPool=wlm_pool Granularity=174416M TotalSpace=36627360M UsedSpace=0
+  	Flags=PrivateData
+  	StageInTimeout=86400 StageOutTimeout=86400 ValidateTimeout=5 OtherTimeout=300
+  	GetSysState=/opt/cray/dw_wlm/default/bin/dw_wlm_cli</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>The output of the above command shows that each SSD is 174416 MB or roughly 200 GB. The number of allocated Burst Buffer nodes can then be changed by requesting an SSD capacity that is in between adjacent integer multiples of the SSD size. To clarify, the command below, for example, would request 2 Burst Buffer nodes because <code>3*174416 MB &gt; 450 GB &gt; 2*174416 MB</code>.</p>
+
+<p><code>#DW jobdw type=scratch access_mode=striped capacity=450GB</code></p>
+
+<p>For the test system that we have been using in this post, it turns out that changing the number of Burst Buffer nodes does not improve I/O performance when all MPI I/O settings are kept their default values. Increasing the number of MPI aggregators to 64 again yields a slightly better performance. Other settings to test have been comprehensively covered in the <a href="https://sites.google.com/lbl.gov/burstbuffers">NERSC tutorials</a>, and I won&rsquo;t attempt any further optimization in this post.</p>
+
+<h1 id="conclusions">Conclusions</h1>
+
+<p>In this post, we took a more closer look at collective MPI I/O and how its performance can be tuned via environment variables. We managed to improve I/O performance by increasing the number of MPI aggregators. We also discussed how SSDs are finally becoming integrated in supercomputing systems focusing on Cray&rsquo;s Burst Buffer implementation. A realistic simulation example illustrated that significant time savings can be achieved in I/O intensive workflows by using the SSDs to buffer the data.</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io//tags/cp2k/">CP2K</a>
+
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io//tags/mpi/">MPI</a>
+
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io//tags/computational-chemistry/">computational chemistry</a>
+
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io//tags/high-performance-computing/">high-performance computing</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://nholmber.github.io/2017/05/mpi-io-cube/" data-tooltip="Parallelizing I/O operations with MPI: A case study with volumetric data">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https%3a%2f%2fnholmber.github.io%2f2017%2f12%2fmpi-io-cube-pt2%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fnholmber.github.io%2f2017%2f12%2fmpi-io-cube-pt2%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fnholmber.github.io%2f2017%2f12%2fmpi-io-cube-pt2%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#table-of-contents">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2017 Nico Holmberg. Powered by <a href="https://gohugo.io">Hugo</a> and the <a href="https://themes.gohugo.io/hugo-tranquilpeak-theme">Tranquilpeak</a> theme. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  <nav>
+    <ul class="post-actions post-action-nav">
+      
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--disabled">
+          
+            <i class="fa fa-angle-left"></i>
+            <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+          </a>
+        </li>
+        <li class="post-action">
+          
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://nholmber.github.io/2017/05/mpi-io-cube/" data-tooltip="Parallelizing I/O operations with MPI: A case study with volumetric data">
+          
+            <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </nav>
+  <ul class="post-actions post-action-share">
+    
+      <li class="post-action hide-lg hide-md hide-sm">
+        <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+          <i class="fa fa-share-alt"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https%3a%2f%2fnholmber.github.io%2f2017%2f12%2fmpi-io-cube-pt2%2f">
+          <i class="fa fa-google-plus"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fnholmber.github.io%2f2017%2f12%2fmpi-io-cube-pt2%2f">
+          <i class="fa fa-facebook-official"></i>
+        </a>
+      </li>
+      <li class="post-action hide-xs">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fnholmber.github.io%2f2017%2f12%2fmpi-io-cube-pt2%2f">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </li>
+    
+    
+      <li class="post-action">
+        <a class="post-action-btn btn btn--default" href="#disqus_thread">
+          <i class="fa fa-comment-o"></i>
+        </a>
+      </li>
+    
+    <li class="post-action">
+      
+        <a class="post-action-btn btn btn--default" href="#table-of-contents">
+      
+        <i class="fa fa-list"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <ul class="share-options">
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3a%2f%2fnholmber.github.io%2f2017%2f12%2fmpi-io-cube-pt2%2f">
+        <i class="fa fa-google-plus"></i><span>Share on Google Plus</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fnholmber.github.io%2f2017%2f12%2fmpi-io-cube-pt2%2f">
+        <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+      </a>
+    </li>
+    <li class="share-option">
+      <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fnholmber.github.io%2f2017%2f12%2fmpi-io-cube-pt2%2f">
+        <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Nico Holmberg</h4>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Doctoral Student, Computational Chemistry
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Espoo, Finland
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/">
+                <h3 class="media-heading">Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Dec 12, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>In my previous <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">post</a>, I discussed the benefits of using the message passing interface (MPI) to parse large data files in parallel over multiple processors. In today&rsquo;s post, I will demonstrate how MPI I/O operations can be further accelerated by introducing the concept of hints. The second topic I will discuss is the emergence of solid-state drives in high-performance computing systems to resolve I/O bottlenecks. These topics will be illustrated by benchmark calculations using a parallel writer routine that I will implement to the <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">task described previously</a>.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/05/mpi-io-cube/">
+                <h3 class="media-heading">Parallelizing I/O operations with MPI: A case study with volumetric data</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Lately, parsing volumetric data from large (&gt; 300 MB) text files has been a computational bottleneck in my simulations. Because I expect to be processing hundreds of these files, I decided to parallelize the parser routine by leveraging the <a href="https://en.wikipedia.org/wiki/Message_Passing_Interface">message passing interface</a> (MPI). I will describe my first experience with MPI I/O in this post by going through the synthesis process of the parallelized parser routine. I will also examine the performance of the parallel parser.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/04/cp2k-build-cray-xc40/">
+                <h3 class="media-heading">Building CP2K on a Cray XC40</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Compiling a <a href="https://www.cp2k.org/">CP2K</a> binary &ndash; the massively parallel, open-source quantum chemistry and solid state physics program written in Fortran 2003 &ndash; can be a daunting task if you&rsquo;ve never built a large project using <a href="https://en.wikipedia.org/wiki/Make_(software)">maketools</a>. This post aims to demystify the build process by showcasing a full CP2K build on a Cray XC40 supercomputer (codename <a href="https://research.csc.fi/sisu-supercomputer"><em>Sisu</em></a>) including dependencies.
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/02/welcome/">
+                <h3 class="media-heading">Welcome to my website!</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Feb 2, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Greetings and welcome! You have stumbled upon the personal website and blog of Nico Holmberg, a 26 year old Finn pursuing a doctoral degree in Computational Quantum Chemistry. Feel free to check out my <a href="../../../profile">profile</a> for more information about me, my professional projects and other interests!
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/post/">
+                <h3 class="media-heading">Posts</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Dec 12, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         5 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/nholmber/image/upload/v1487095700/sidebar_nefvej.jpg');"></div>
+  
+
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.js"></script>
+
+
+<script src="https://nholmber.github.io/js/script-wl33z0n6ocaypepiqrazthtivfrliqijej4rq8ek8gvrv1awftmgjuv8k4zc.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight').each(function(i, block) {
+    var code = "";
+    hljs.highlightAuto(block.innerText).value.split(/\r\n|\r|\n/).forEach(function(line) {
+      code += "<span class=\"line\">" + line + "</span><br>";
+    });
+    if (code.length > 0) {
+      block.innerHTML = code;  
+    }
+  });
+  $('pre > code').each(function(i, block) {
+    $(this).addClass('codeblock');
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/nholmber.github.io\/2017\/12\/mpi-io-cube-pt2\/';
+          
+            this.page.identifier = '\/2017\/12\/mpi-io-cube-pt2\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'nholmber';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+    
+  </body>
+</html>
+

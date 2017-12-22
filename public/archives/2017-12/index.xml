@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Mpi on Nico Holmberg</title>
-    <link>https://nholmber.github.io/tags/mpi/</link>
-    <description>Recent content in Mpi on Nico Holmberg</description>
+    <title>2017 12 on Nico Holmberg</title>
+    <link>https://nholmber.github.io/archives/2017-12/</link>
+    <description>Recent content in 2017 12 on Nico Holmberg</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 22 Dec 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://nholmber.github.io/tags/mpi/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://nholmber.github.io/archives/2017-12/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,17 +18,6 @@
       
       <guid>https://nholmber.github.io/2017/12/mpi-io-cube-pt2/</guid>
       <description>&lt;p&gt;In my previous &lt;a href=&#34;https://nholmber.github.io/2017/05/mpi-io-cube/&#34;&gt;post&lt;/a&gt;, I discussed the benefits of using the message passing interface (MPI) to parse large data files in parallel over multiple processors. In today&amp;rsquo;s post, I will demonstrate how MPI I/O operations can be further accelerated by introducing the concept of hints. The second topic I will discuss is the emergence of solid-state drives in high-performance computing systems to resolve I/O bottlenecks. These topics will be illustrated by benchmark calculations using a parallel writer routine that I will implement to the &lt;a href=&#34;https://nholmber.github.io/2017/05/mpi-io-cube/&#34;&gt;task described previously&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Parallelizing I/O operations with MPI: A case study with volumetric data</title>
-      <link>https://nholmber.github.io/2017/05/mpi-io-cube/</link>
-      <pubDate>Thu, 04 May 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://nholmber.github.io/2017/05/mpi-io-cube/</guid>
-      <description>&lt;p&gt;Lately, parsing volumetric data from large (&amp;gt; 300 MB) text files has been a computational bottleneck in my simulations. Because I expect to be processing hundreds of these files, I decided to parallelize the parser routine by leveraging the &lt;a href=&#34;https://en.wikipedia.org/wiki/Message_Passing_Interface&#34;&gt;message passing interface&lt;/a&gt; (MPI). I will describe my first experience with MPI I/O in this post by going through the synthesis process of the parallelized parser routine. I will also examine the performance of the parallel parser.&lt;/p&gt;
 
 &lt;p&gt;&lt;/p&gt;</description>
     </item>

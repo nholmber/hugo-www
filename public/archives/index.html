@@ -15,7 +15,7 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Hugo 0.20.6">
+    <meta name="generator" content="Hugo 0.26">
     <title>Archives</title>
     <meta name="author" content="Nico Holmberg">
     <meta name="keywords" content="">
@@ -187,15 +187,24 @@ ga('send', 'pageview');
     <div class="archive archive-year box" data-date="2017">
       <h4 class="archive-title" style="text-decoration: none;">2017</h4>
       
+        <ul class="archive-posts archive-month" data-date="201712">
+          <h5 class="archive-title" style="text-decoration: none;">December</h5>
+          
+            <li class="archive-post archive-day" data-date="20171222">
+              <a class="archive-post-title" href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/">Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer</a>
+            </li>
+          
+            <li class="archive-post archive-day" data-date="20171222">
+              <a class="archive-post-title" href="https://nholmber.github.io/post/">Posts</a>
+            </li>
+          
+        </ul>
+      
         <ul class="archive-posts archive-month" data-date="201705">
           <h5 class="archive-title" style="text-decoration: none;">May</h5>
           
             <li class="archive-post archive-day" data-date="20170504">
               <a class="archive-post-title" href="https://nholmber.github.io/2017/05/mpi-io-cube/">Parallelizing I/O operations with MPI: A case study with volumetric data</a>
-            </li>
-          
-            <li class="archive-post archive-day" data-date="20170504">
-              <a class="archive-post-title" href="https://nholmber.github.io/post/">Posts</a>
             </li>
           
         </ul>
@@ -274,6 +283,25 @@ ga('send', 'pageview');
           <div class="media">
             
             <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/">
+                <h3 class="media-heading">Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Dec 12, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>In my previous <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">post</a>, I discussed the benefits of using the message passing interface (MPI) to parse large data files in parallel over multiple processors. In today&rsquo;s post, I will demonstrate how MPI I/O operations can be further accelerated by introducing the concept of hints. The second topic I will discuss is the emergence of solid-state drives in high-performance computing systems to resolve I/O bottlenecks. These topics will be illustrated by benchmark calculations using a parallel writer routine that I will implement to the <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">task described previously</a>.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
               <a class="link-unstyled" href="https://nholmber.github.io/2017/05/mpi-io-cube/">
                 <h3 class="media-heading">Parallelizing I/O operations with MPI: A case study with volumetric data</h3>
               </a>
@@ -334,7 +362,7 @@ ga('send', 'pageview');
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  May 5, 2017
+                  Dec 12, 2017
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"></div>
@@ -350,7 +378,7 @@ ga('send', 'pageview');
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         4 posts found
+         5 posts found
       </p>
     </div>
   </div>
