@@ -25,10 +25,4 @@ In my previous post, I promised to prepare a tutorial on how to use the CDFT mod
 
 P.S. Sorry about the weird looking (Georgia) font in the presentation below. The font does not look as it should on SlideShare although I embedded the font in the original pdf file. For future presentations I decide to host on SlideShare, I need to experiment more with the platform to weed out font appearance and other visual bugs. You can download the presentation from SlideShare and open it with an external pdf reader to fix the appearance of the font.
 
-
-<iframe
-  style="width: 100%; height: 500px;" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"
-  src="http://www.slideshare.net/slideshow/embed_code/key/vPEv2KKPYQWWUO?rel=0" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
-<div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/NicoHolmberg/cp2k-how-to-use-the-constrained-dft-module" title="CP2K: How to use the constrained DFT module" target="_blank">CP2K: How to use the constrained DFT module</a> </strong> from <strong><a href="https://www.slideshare.net/NicoHolmberg" target="_blank">Nico Holmberg</a></strong> </div>
-
 <iframe src="//www.slideshare.net/slideshow/embed_code/key/vPEv2KKPYQWWUO" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/NicoHolmberg/cp2k-how-to-use-the-constrained-dft-module" title="CP2K: How to use the constrained DFT module" target="_blank">CP2K: How to use the constrained DFT module</a> </strong> from <strong><a href="https://www.slideshare.net/NicoHolmberg" target="_blank">Nico Holmberg</a></strong> </div>
