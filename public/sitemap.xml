@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://nholmber.github.io/2018/01/cp2k-uk-2018-recap/</loc>
+    <lastmod>2018-01-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://nholmber.github.io/2017/12/cp2k-uk-2018/</loc>
     <lastmod>2017-12-22T00:00:00+00:00</lastmod>
   </url>
@@ -62,6 +67,12 @@
   </url>
   
   <url>
+    <loc>https://nholmber.github.io/archives/2018-01/</loc>
+    <lastmod>2018-01-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://nholmber.github.io/archives/</loc>
     <lastmod>2017-02-22T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -73,8 +84,8 @@
   </url>
   
   <url>
-    <loc>https://nholmber.github.io/tags/computational-chemistry/</loc>
-    <lastmod>2017-12-22T00:00:00+00:00</lastmod>
+    <loc>https://nholmber.github.io/tags/cdft/</loc>
+    <lastmod>2018-01-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -85,14 +96,20 @@
   </url>
   
   <url>
-    <loc>https://nholmber.github.io/categories/conferences/</loc>
+    <loc>https://nholmber.github.io/tags/computational-chemistry/</loc>
     <lastmod>2017-12-22T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>https://nholmber.github.io/categories/conferences/</loc>
+    <lastmod>2018-01-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://nholmber.github.io/tags/cp2k/</loc>
-    <lastmod>2017-12-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-01-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -110,7 +127,7 @@
   
   <url>
     <loc>https://nholmber.github.io/tags/how-to/</loc>
-    <lastmod>2017-12-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-01-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -128,7 +145,7 @@
   
   <url>
     <loc>https://nholmber.github.io/</loc>
-    <lastmod>2017-12-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-01-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -146,19 +163,19 @@
   
   <url>
     <loc>https://nholmber.github.io/post/</loc>
-    <lastmod>2017-12-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-01-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://nholmber.github.io/tags/</loc>
-    <lastmod>2017-12-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-01-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://nholmber.github.io/tags/tutorial/</loc>
-    <lastmod>2017-12-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-01-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
