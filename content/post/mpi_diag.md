@@ -44,17 +44,17 @@ What are the advantages and disadvantages of these two distributions? Keep in mi
 
 Taking these notions into account, we see that the cyclic distribution is superior for evenly distributing a matrix, but poor for matrix manipulations because a lot of communication is required to access adjacent matrix elements that might reside on different processors. The opposite holds true for block decomposition: linear algebra can be executed efficiently on submatrix blocks that are contiguous in memory, but there might be load balancing issues e.g. if the matrix contains "sparse" regions. The block cyclic matrix distribution attempts to combine the best qualities of both representations by decomposing the matrix into smaller blocks that are cyclically distributed among processors.
 
-The most efficient block cyclic layout is a two dimensional layout where the total $N$ processors are arranged into a rectangular grid $N = N\_{\mathrm{row}} \cdot N\_{\mathrm{col}}$ with $N\_{\mathrm{row}}$ rows and $N\_{\mathrm{col}}$ columns. This distribution has been visualized e.g. [here](https://www.hector.ac.uk/cse/distributedcse/reports/UniTBD/UniTBD/node18.html). The total number of matrix blocks is controlled by the size of each block, that is, the number of rows and columns included within each block. These quantities are user controllable and they often are set to the same value making the blocks square. The block sizes are adjusted accordingly in case the matrix is not evenly divisible by the total number of processors.
+The most efficient block cyclic layout is a two dimensional layout where the total $N$ processors are arranged into a rectangular grid $N = N\_{\mathrm{row}} \times N\_{\mathrm{col}}$ with $N\_{\mathrm{row}}$ rows and $N\_{\mathrm{col}}$ columns. This distribution has been visualized below in Figure 2. The total number of matrix blocks is controlled by the size of each block, that is, the number of rows and columns included within each block. These quantities are user controllable and they often are set to the same value making the blocks square. The block sizes are adjusted accordingly in case the matrix is not evenly divisible by the total number of processors.
 
 ![E](http://res.cloudinary.com/nholmber/image/upload/v1524773339/block_cyclic_kaqa8h.png)
-**Figure 2.** Example
+**Figure 2.** Illustration of the two dimensional block cyclic layout. In this example, a matrix with $7 \times 10$ elements, or more generally collections of elements, (the numbered entries) is distributed over a $2 \times 3$ processor grid. The colors indicate how elements in the global matrix is mapped onto different processors. The distribution on the right displays the processor's local view of the matrix.
 
 The two dimensional block cyclic layout has been adopted in the general purpose dense matrix linear algebra package [**ScaLAPACK**](https://www.netlib.org/scalapack/). This package is a reference library, i.e., it has been tested extensively on different platforms but the numerical performance has not been optimized for a specific architecture. Computing vendors provide their own tuned versions of the library that target specific hardware, e.g. Intel MKL or Cray LibSci, which should always be used for production calculations if available due to the significant speed advantages they offer.
 
 
 # Parallel matrix diagonalization with ScaLAPACK and ELPA {#scalapack}
 
-To recap, let's say we are given a dense matrix $\boldsymbol{\mathrm{A}}$ that is distributed in parallel using MPI over a set of $N$ processors in block cyclic distribution (see [above]({{< ref "#intro" >}}) if these concepts are unclear). Our task is to diagonalize $\boldsymbol{\mathrm{A}}$ and we would like to do it as efficiently as possible.
+To recap, assume we are given a dense matrix $\boldsymbol{\mathrm{A}}$ that is distributed in parallel using MPI over a set of $N$ processors in block cyclic distribution (see [above]({{< ref "#intro" >}}) if these concepts are unclear). Our task is to diagonalize $\boldsymbol{\mathrm{A}}$ and we would like to do it as efficiently as possible.
 
 Matrix diagonalization is intimately linked with eigenvalue problems and the [eigendecomposition](https://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix) of a matrix. Concretely, we can define matrix diagonalization as finding the solution to the following eigenvalue problem
 
@@ -62,7 +62,7 @@ $$ \boldsymbol{\mathrm{A}}\boldsymbol{\mathrm{X}}=\boldsymbol{\mathrm{X}}\boldsy
 
 where $\boldsymbol{\mathrm{X}}$ is a matrix that contains the eigenvectors of $\boldsymbol{\mathrm{A}}$ and $\boldsymbol{\mathrm{\Lambda}}$ is the eigenvalue matrix. The eigenvalue matrix contains the eigenvalues of $\boldsymbol{\mathrm{A}}$ on its diagonal and zeroes everywhere else. It therefore is the *actual* diagonal matrix we seek. As I shall subsequently show, computing the eigenvalue matrix requires less work than the eigenvector matrix. However, eigenvectors are often useful in their own right and it is very common that both must be computed.
 
-Depending on the properties of $\boldsymbol{\mathrm{A}}$, there are a variety of [eigenvalue algorithms](https://en.wikipedia.org/wiki/Eigenvalue_algorithm) we could adopt to diagonalize the matrix. For the remainder of the post, I will assume that the matrix $\boldsymbol{\mathrm{A}}$ is a symmetric real matrix (or, analogously, complex Hermitian): $\boldsymbol{\mathrm{A}} = \boldsymbol{\mathrm{A}}^T$. Such matrices frequently appear in applications especially in the fields of computational chemistry and physics.
+Depending on the properties of $\boldsymbol{\mathrm{A}}$, there are a variety of [eigenvalue algorithms](https://en.wikipedia.org/wiki/Eigenvalue_algorithm) we could adopt to diagonalize the matrix. For the remainder of the post, I will assume that the matrix $\boldsymbol{\mathrm{A}}$ is a symmetric real matrix (or, analogously, complex Hermitian): $\boldsymbol{\mathrm{A}} = \boldsymbol{\mathrm{A}}^\mathrm{T}$. Such matrices frequently appear in applications especially in the fields of computational chemistry and physics.
 
 Dense matrix linear algebra packages that are based on ScaLAPACK offer [three different algorithms](https://software.intel.com/en-us/mkl-developer-reference-c-scalapack-driver-routines) for diagonalizing for real symmetric matrices, namely, the `p?syevd`, `p?syevx` and `p?syevr` methods where `?` accepts differents value depending on the matrix data type, e.g., `d` for double precision matrices. These algorithms not only different in the approach taken to diagonalize the matrix, but also whether they are suitable for calculating only selected eigenvalues of the input matrix or whether all eigenvalues must be computed.
 
@@ -83,7 +83,7 @@ The ScaLAPACK eigenvalue algorithm `p?syevd` is comprised of the following steps
 
 1. Reduction to tridiagonal form $\boldsymbol{\mathrm{T}}$ with [Householder transformations](https://en.wikipedia.org/wiki/Householder_transformation#Tridiagonalization) $\boldsymbol{\mathrm{Q}}$
      $$
-      \boldsymbol{\mathrm{T}} = \boldsymbol{\mathrm{Q}}\boldsymbol{\mathrm{A}}\boldsymbol{\mathrm{Q}}^T =
+      \boldsymbol{\mathrm{T}} = \boldsymbol{\mathrm{Q}}\boldsymbol{\mathrm{A}}\boldsymbol{\mathrm{Q}}^\mathrm{T} =
       \begin{bmatrix}
        A\_{11} & A\_{12} & 0       & \cdots  & \cdots  & 0        \\\\\
        A\_{21} & A\_{22} & A\_{23} & \ddots  & \ddots  & \vdots   \\\\\
@@ -96,7 +96,7 @@ The ScaLAPACK eigenvalue algorithm `p?syevd` is comprised of the following steps
 2. Solution of tridiagonal eigenvalue problem with [divide-and-conquer (DQ) algorithm](https://en.wikipedia.org/wiki/Divide-and-conquer_eigenvalue_algorithm)
      $$ \boldsymbol{\mathrm{T}}\tilde{\boldsymbol{\mathrm{X}}} = \tilde{\boldsymbol{\mathrm{X}}}\boldsymbol{\mathrm{\Lambda}} $$
 3. Backtransformation of eigenvectors
-     $$ \boldsymbol{\mathrm{X}} = \boldsymbol{\mathrm{Q}}^T\tilde{\boldsymbol{\mathrm{X}}} $$
+     $$ \boldsymbol{\mathrm{X}} = \boldsymbol{\mathrm{Q}}^\mathrm{T}\tilde{\boldsymbol{\mathrm{X}}} $$
 
 The `p?syevx` and `p?syevr` methods differ from `p?syevd` in the second step of algorithm: the former relies on bisection and inverse iteration, whereas the latter on the multiple relatively robust representations (MRRR) iteration. You can find more in-depth details details about these two algorithms e.g. in this [paper](https://dl.acm.org/citation.cfm?id=1644002). Significant performance differences between these different algorithms become apparent only when a subset of the eigenvalues are required, because `p?syevd` always returns the full set of eigenvalues, whereas the others are capable of computing individual eigenvalues. However, here it worth stressing that all eigenvalues must be computed since our ultimate goal is to diagonalize the input matrix. In the remainder of this post, I will therefore exclusively discuss the DQ method based `p?syevd` algorithm.
 
@@ -119,7 +119,11 @@ The first two factors are fixed for a given problem, while the latter three can 
 
 The benchmarks were run on a Cray XC40 supercomputer (["Sisu"](https://research.csc.fi/sisu-supercomputer)) where each computational node is comprised of two 12-core Intel Xeon E5-2690v3 processors with 64 GB DDR4 memory. The matrix block size is set to 64 in both row and column dimensions. The effect of using the optional QR decomposition step in the ELPA algorithm was also gauged. Note that the QR decomposition works only with even sized matrices whose block size is $\ge 64$. The 2017.05 version of ELPA and the AVX2_BLOCK2 kernel are used throughout.
 
-As a side note, CP2K by default limits the number of MPI processes used for diagonalization, because earlier benchmarks on a Cray XE6 machine have shown ScaLAPACK diagonalization performance to suffer when the matrix is parallelized on too many processes relative to the size of the matrix. The 'optimal' number of processes for diagonalization, $M$, is computed using the heuristic $M = (K+a*x-1)/(a*x)*a$, where $K$ is the size of the input matrix, and $a$ and $x$ are integers with default values $a=4$ and $x=60$. If $M \lt N$, the matrix is redistributed onto $M$ processors before diagonalizing it. With ELPA, redistribution of the input matrix is performed only in the event that the calculation would otherwise crash within the ELPA library due to overparallelization, which causes some processors to hold no actual matrix elements. In addition to the tests discussed above, I have also estimated the effects of the optimial number of CPUs heuristic with ScaLAPACK by either disabling the check or by using the default values.
+As a side note, CP2K by default limits the number of MPI processes used for diagonalization, because earlier benchmarks on a Cray XE6 machine have shown ScaLAPACK diagonalization performance to suffer when the matrix is parallelized on too many processes relative to the size of the matrix. The 'optimal' number of processes for diagonalization, $M$, is computed using the heuristic
+
+$$M = (K+a\times x-1)/(a\times x)\times a$$
+
+where $K$ is the size of the input matrix, and $a$ and $x$ are integers with default values $a=4$ and $x=60$. If $M \lt N$, the matrix is redistributed onto $M$ processors before diagonalizing it. With ELPA, redistribution of the input matrix is performed only in the event that the calculation would otherwise crash within the ELPA library due to overparallelization, which causes some processors to hold no actual matrix elements. In addition to the tests discussed above, I have also estimated the effects of the optimial number of CPUs heuristic with ScaLAPACK by either disabling the check or by using the default values.
 
 The main benchmark results have been summarized in the figure below.
 
