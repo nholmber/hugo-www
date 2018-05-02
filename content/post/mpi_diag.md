@@ -1,10 +1,10 @@
 +++
 tags = ["CP2K", "MPI", "computational chemistry", "high-performance computing", "linear algebra"]
 categories = ["parallel programming"]
-archives = ["2018-04"]
-date = "2018-04-22"
+archives = ["2018-05"]
+date = "2018-05-02"
 title = "Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK"
-keywords = ["MPI", "computational chemistry"]
+keywords = ["CP2K", "MPI", "computational chemistry", "high-performance computing", "linear algebra"]
 autoThumbnailImage = "false"
 thumbnailImagePosition = "left"
 thumbnailImage = "https://res.cloudinary.com/nholmber/image/upload/v1525260786/toc_small_sirbri.png"
@@ -13,11 +13,9 @@ slug = "mpi-diagonalization"
 
 +++
 
-
-Matrix diagonalization is one of the most fundamental linear algebra operations with a wide range of applications in scientific and other fields of computing. At the same time, it is also one of the most expensive operations with a formal [computational complexity](https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations) of a $\mathcal{O}(N^3)$, which could become a performance hindering factor as the size of system grows. In this post, I will briefly introduce the canonical algorithm for diagonalizing matrices in parallel computing to set the scene for today's main topic: improving diagonalization performance. With the help of benchmark calculations, I will then demonstrate how a clever mathematical library choice can easily improve diagonalization performance by at least 50 %.
+Matrix diagonalization is one of the most fundamental linear algebra operations with a wide range of applications in scientific and other fields of computing. At the same time, it is also one of the most expensive operations with a formal [computational complexity](https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations) of a $\mathcal{O}(N^3)$, which can become a performance bottleneck as the size of system grows. In this post, I will briefly introduce the canonical algorithm for diagonalizing matrices in parallel computing to set the scene for today's main topic: improving diagonalization performance. With the help of benchmark calculations, I will then demonstrate how a clever mathematical library choice can easily improve diagonalization performance by at least 50 %.
 
 <!--more-->
-
 
 It has been a hectic late winter--early spring for me as I have been gathering data for the last manuscript to be included in my PhD thesis. As a result, I unfortunately haven't had the time to write any new posts in quite a while, although I had a number of topics already pre-planned. After a feverish couple weeks of writing, I can finally see the finish line in sight and I expect to have the manuscript submission ready in a few days. This has finally given me the opportunity to write up today's post.
 
@@ -115,7 +113,9 @@ Matrix diagonalization performance in general depends on a variety of factors:
   * MPI block size for matrix (user tunable setting)
   * Diagonalization algorithm (user tunable setting if implementation allows it)
 
-The first two factors are fixed for a given problem, while the latter three can be optimized at least to a degree by the user. In this section, I will compare the diagonalization performance of the ScaLAPACK `p?syevd` (as implemented in the Cray Libsci library) and ELPA algorithms. I will examine two square matrix sizes with $5888^2$ and $13034^2$ elements, respectively, and measure how the algorithms scale as the number of processors, $N$, is increased. The two methods will also be constrasted. The benchmark calculations are performed with the [CP2K quantum chemistry software](https://www.cp2k.org/). Each data point corresponds to the average diagonalization time obtained by diagonalizing the input matrix 10 times. The simulations were repeated twice to collect better timing statistics. The CP2K input files are based on benchmark input files that are distributed with the software, which can be found here.
+The first two factors are fixed for a given problem, while the latter three can be optimized at least to a degree by the user. In this section, I will compare the diagonalization performance of the ScaLAPACK `p?syevd` (as implemented in the Cray Libsci library) and ELPA algorithms. I will examine two square matrix sizes with $5888^2$ and $13034^2$ elements, respectively, and measure how the algorithms scale as the number of processors, $N$, is increased. The two methods will also be constrasted. The benchmark calculations are performed with the [CP2K quantum chemistry software](https://www.cp2k.org/). Each data point corresponds to the average diagonalization time obtained by diagonalizing the input matrix 10 times. The simulations were repeated twice to collect better timing statistics. The CP2K input files used in this post are based on standard benchmark input files distributed with the software. You can find them in full from this [link](https://github.com/nholmber/hugo-www/tree/master/content-data/mpi-diag/example-inputs).
+
+> Disclaimer: I am in no way affiliated with ELPA. I discovered the library when I was attempting to maximize the performance of my quantum chemistry simulations. An interface to ELPA was already implemented in CP2K and I merely extended it with new features.
 
 The benchmarks were run on a Cray XC40 supercomputer (["Sisu"](https://research.csc.fi/sisu-supercomputer)) where each computational node is comprised of two 12-core Intel Xeon E5-2690v3 processors with 64 GB DDR4 memory. The matrix block size is set to 64 in both row and column dimensions. The effect of using the optional QR decomposition step in the ELPA algorithm was also gauged. Note that the QR decomposition works only with even sized matrices whose block size is $\ge 64$. The 2017.05 version of ELPA and the AVX2_BLOCK2 kernel are used throughout.
 
@@ -140,4 +140,4 @@ I also tested the effectiveness of limiting the total number of MPI processors f
 
 # Conclusions
 
-In this post, I discussed algorithms for diagonalizing dense matrices in the context of MPI parallelized, distributed memory applications. I showed that the algorithm implemented in the ELPA library clearly outperforms the ScaLAPACK equivalent by at least 50 %. Because the diagonalization routine interface in ELPA is very similar to ScaLAPACK, introducing ELPA as an optional replacement for ScaLAPACK in diagonalization intensive MPI applications should be relatively straightforward to implement and could lead to significant savings in computational time.
+In this post, I discussed algorithms for diagonalizing dense matrices in the context of MPI parallelized, distributed memory applications. I showed that the algorithm implemented in the ELPA library clearly outperforms the ScaLAPACK equivalent by at least 50 %. Because the diagonalization routine interface in ELPA is very similar to ScaLAPACK, introducing ELPA as an optional replacement for ScaLAPACK in diagonalization intensive MPI applications should be relatively straightforward to implement and could lead to significant savings in computational time depending on application.
