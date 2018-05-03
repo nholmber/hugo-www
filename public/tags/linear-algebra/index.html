@@ -16,21 +16,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Hugo 0.26 with theme Tranquilpeak 0.4.3-BETA">
-    <title>Mpi</title>
+    <title>Linear Algebra</title>
     <meta name="author" content="Nico Holmberg">
     <meta name="keywords" content="">
 
     <link rel="icon" href="https://nholmber.github.io/favicon.png">
     
-      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://nholmber.github.io/tags/mpi/index.xml">
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://nholmber.github.io/tags/linear-algebra/index.xml">
     
 
     
     <meta name="description" content="The personal website of Nico Holmberg">
     <meta property="og:description" content="The personal website of Nico Holmberg">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="Mpi">
-    <meta property="og:url" content="/tags/mpi/">
+    <meta property="og:title" content="Linear Algebra">
+    <meta property="og:url" content="/tags/linear-algebra/">
     <meta property="og:site_name" content="Nico Holmberg">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Nico Holmberg">
@@ -242,122 +242,6 @@ ga('send', 'pageview');
         <img alt="" itemprop="image" src="https://res.cloudinary.com/nholmber/image/upload/v1525260786/toc_small_sirbri.png"/>
       </div>
     </a>
-  
-</article>
-
-            
-              
-  
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-top" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-      <a href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/">
-        <div class="postShorten-thumbnailimg">
-          <img alt="" itemprop="image" src="https://nholmber.github.io/false"/>
-        </div>
-      </a>
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/">
-          Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2017-12-22T00:00:00Z">
-        
-  December 22, 2017
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://nholmber.github.io/categories/parallel-programming">parallel programming</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      <p>In my previous <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">post</a>, I discussed the benefits of using the message passing interface (MPI) to parse large data files in parallel over multiple processors. In today&rsquo;s post, I will demonstrate how MPI I/O operations can be further accelerated by introducing the concept of hints. The second topic I will discuss is the emergence of solid-state drives in high-performance computing systems to resolve I/O bottlenecks. These topics will be illustrated by benchmark calculations using a parallel writer routine that I will implement to the <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">task described previously</a>.</p>
-
-<p></p>
-      <p>
-        <a href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-            
-              
-  
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-top" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-      <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">
-        <div class="postShorten-thumbnailimg">
-          <img alt="" itemprop="image" src="https://nholmber.github.io/false"/>
-        </div>
-      </a>
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://nholmber.github.io/2017/05/mpi-io-cube/">
-          Parallelizing I/O operations with MPI: A case study with volumetric data
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2017-05-04T00:00:00Z">
-        
-  May 4, 2017
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://nholmber.github.io/categories/parallel-programming">parallel programming</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      <p>Lately, parsing volumetric data from large (&gt; 300 MB) text files has been a computational bottleneck in my simulations. Because I expect to be processing hundreds of these files, I decided to parallelize the parser routine by leveraging the <a href="https://en.wikipedia.org/wiki/Message_Passing_Interface">message passing interface</a> (MPI). I will describe my first experience with MPI I/O in this post by going through the synthesis process of the parallelized parser routine. I will also examine the performance of the parallel parser.</p>
-
-<p></p>
-      <p>
-        <a href="https://nholmber.github.io/2017/05/mpi-io-cube/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
   
 </article>
 

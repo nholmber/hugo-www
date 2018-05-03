@@ -6,10 +6,21 @@
     <description>Recent content in Computational Chemistry on Nico Holmberg</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 Dec 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 02 May 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://nholmber.github.io/tags/computational-chemistry/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK</title>
+      <link>https://nholmber.github.io/2018/05/mpi-diagonalization/</link>
+      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/2018/05/mpi-diagonalization/</guid>
+      <description>&lt;p&gt;Matrix diagonalization is a fundamental linear algebra operation with a wide range of applications in scientific and other fields of computing. At the same time, it is also one of the most expensive operations with a formal &lt;a href=&#34;https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations&#34;&gt;computational complexity&lt;/a&gt; of $\mathcal{O}(N^3)$, which can become a significant performance bottleneck as the size of the system grows. In this post, I will introduce the canonical algorithm for diagonalizing matrices in parallel computing to set the scene for today&amp;rsquo;s main topic: improving diagonalization performance. With the help of benchmark calculations, I will then demonstrate how a clever mathematical library choice can easily reduce the time needed to diagonalize a matrix by at least 50 %.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer</title>

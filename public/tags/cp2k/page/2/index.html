@@ -16,21 +16,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Hugo 0.26 with theme Tranquilpeak 0.4.3-BETA">
-    <title>Mpi</title>
+    <title>Cp2k</title>
     <meta name="author" content="Nico Holmberg">
     <meta name="keywords" content="">
 
     <link rel="icon" href="https://nholmber.github.io/favicon.png">
     
-      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://nholmber.github.io/tags/mpi/index.xml">
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://nholmber.github.io/tags/cp2k/index.xml">
     
 
     
     <meta name="description" content="The personal website of Nico Holmberg">
     <meta property="og:description" content="The personal website of Nico Holmberg">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="Mpi">
-    <meta property="og:url" content="/tags/mpi/">
+    <meta property="og:title" content="Cp2k">
+    <meta property="og:url" content="/tags/cp2k/">
     <meta property="og:site_name" content="Nico Holmberg">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Nico Holmberg">
@@ -196,68 +196,10 @@ ga('send', 'pageview');
 
   
 
-<article class="postShorten postShorten--thumbnailimg-left" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://nholmber.github.io/2018/05/mpi-diagonalization/">
-          Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2018-05-02T00:00:00Z">
-        
-  May 2, 2018
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://nholmber.github.io/categories/parallel-programming">parallel programming</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      <p>Matrix diagonalization is a fundamental linear algebra operation with a wide range of applications in scientific and other fields of computing. At the same time, it is also one of the most expensive operations with a formal <a href="https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations">computational complexity</a> of $\mathcal{O}(N^3)$, which can become a significant performance bottleneck as the size of the system grows. In this post, I will introduce the canonical algorithm for diagonalizing matrices in parallel computing to set the scene for today&rsquo;s main topic: improving diagonalization performance. With the help of benchmark calculations, I will then demonstrate how a clever mathematical library choice can easily reduce the time needed to diagonalize a matrix by at least 50 %.</p>
-
-<p></p>
-      <p>
-        <a href="https://nholmber.github.io/2018/05/mpi-diagonalization/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-    <a href="https://nholmber.github.io/2018/05/mpi-diagonalization/">
-      <div class="postShorten-thumbnailimg">
-        <img alt="" itemprop="image" src="https://res.cloudinary.com/nholmber/image/upload/v1525260786/toc_small_sirbri.png"/>
-      </div>
-    </a>
-  
-</article>
-
-            
-              
-  
-    
-  
-
-
-  
-
 <article class="postShorten postShorten--thumbnailimg-top" itemscope itemType="http://schema.org/BlogPosting">
   <div class="postShorten-wrap">
     
-      <a href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/">
+      <a href="https://nholmber.github.io/2017/04/cp2k-build-cray-xc40/">
         <div class="postShorten-thumbnailimg">
           <img alt="" itemprop="image" src="https://nholmber.github.io/false"/>
         </div>
@@ -265,16 +207,16 @@ ga('send', 'pageview');
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/">
-          Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer
+        <a class="link-unstyled" href="https://nholmber.github.io/2017/04/cp2k-build-cray-xc40/">
+          Building CP2K on a Cray XC40
         </a>
       </h1>
       
   <div class="postShorten-meta post-meta">
     
-      <time itemprop="datePublished" datetime="2017-12-22T00:00:00Z">
+      <time itemprop="datePublished" datetime="2017-04-26T00:00:00Z">
         
-  December 22, 2017
+  April 26, 2017
 
       </time>
     
@@ -283,7 +225,7 @@ ga('send', 'pageview');
   
     <span>in</span>
     
-      <a class="category-link" href="https://nholmber.github.io/categories/parallel-programming">parallel programming</a>
+      <a class="category-link" href="https://nholmber.github.io/categories/computational-chemistry">computational chemistry</a>
     
   
 
@@ -291,69 +233,10 @@ ga('send', 'pageview');
 
     </div>
     <div class="postShorten-excerpt" itemprop="articleBody">
-      <p>In my previous <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">post</a>, I discussed the benefits of using the message passing interface (MPI) to parse large data files in parallel over multiple processors. In today&rsquo;s post, I will demonstrate how MPI I/O operations can be further accelerated by introducing the concept of hints. The second topic I will discuss is the emergence of solid-state drives in high-performance computing systems to resolve I/O bottlenecks. These topics will be illustrated by benchmark calculations using a parallel writer routine that I will implement to the <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">task described previously</a>.</p>
-
-<p></p>
+      <p>Compiling a <a href="https://www.cp2k.org/">CP2K</a> binary &ndash; the massively parallel, open-source quantum chemistry and solid state physics program written in Fortran 2003 &ndash; can be a daunting task if you&rsquo;ve never built a large project using <a href="https://en.wikipedia.org/wiki/Make_(software)">maketools</a>. This post aims to demystify the build process by showcasing a full CP2K build on a Cray XC40 supercomputer (codename <a href="https://research.csc.fi/sisu-supercomputer"><em>Sisu</em></a>) including dependencies.
+</p>
       <p>
-        <a href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-            
-              
-  
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-top" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-      <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">
-        <div class="postShorten-thumbnailimg">
-          <img alt="" itemprop="image" src="https://nholmber.github.io/false"/>
-        </div>
-      </a>
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://nholmber.github.io/2017/05/mpi-io-cube/">
-          Parallelizing I/O operations with MPI: A case study with volumetric data
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2017-05-04T00:00:00Z">
-        
-  May 4, 2017
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://nholmber.github.io/categories/parallel-programming">parallel programming</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      <p>Lately, parsing volumetric data from large (&gt; 300 MB) text files has been a computational bottleneck in my simulations. Because I expect to be processing hundreds of these files, I decided to parallelize the parser routine by leveraging the <a href="https://en.wikipedia.org/wiki/Message_Passing_Interface">message passing interface</a> (MPI). I will describe my first experience with MPI I/O in this post by going through the synthesis process of the parallelized parser routine. I will also examine the performance of the parallel parser.</p>
-
-<p></p>
-      <p>
-        <a href="https://nholmber.github.io/2017/05/mpi-io-cube/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://nholmber.github.io/2017/04/cp2k-build-cray-xc40/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -363,6 +246,23 @@ ga('send', 'pageview');
 
             
             
+  <div class="pagination-bar">
+    <ul class="pagination">
+      
+        
+          <li class="pagination-prev">
+            <a class="btn btn--default btn--small" href="https://nholmber.github.io/tags/cp2k/">
+              <i class="fa fa-angle-left text-base icon-mr"></i>
+              <span>NEWER POSTS</span>
+            </a>
+          </li>
+        
+        
+      
+      <li class="pagination-number">page 2 of 2</li>
+    </ul>
+  </div>
+
 
           </section>
         

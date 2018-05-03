@@ -1,0 +1,854 @@
+
+
+  
+    
+  
+
+
+  
+
+
+
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.26 with theme Tranquilpeak 0.4.3-BETA">
+    <title>Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK</title>
+    <meta name="author" content="Nico Holmberg">
+    <meta name="keywords" content="CP2K, MPI, computational chemistry, high-performance computing, linear algebra">
+
+    <link rel="icon" href="https://nholmber.github.io/favicon.png">
+    
+
+    
+    <meta name="description" content="Matrix diagonalization is a fundamental linear algebra operation with a wide range of applications in scientific and other fields of computing. At the same time, it is also one of the most expensive operations with a formal computational complexity of $\mathcal{O}(N^3)$, which can become a significant performance bottleneck as the size of the system grows. In this post, I will introduce the canonical algorithm for diagonalizing matrices in parallel computing to set the scene for today&rsquo;s main topic: improving diagonalization performance. With the help of benchmark calculations, I will then demonstrate how a clever mathematical library choice can easily reduce the time needed to diagonalize a matrix by at least 50 %.
+
+">
+    <meta property="og:description" content="Matrix diagonalization is a fundamental linear algebra operation with a wide range of applications in scientific and other fields of computing. At the same time, it is also one of the most expensive operations with a formal computational complexity of $\mathcal{O}(N^3)$, which can become a significant performance bottleneck as the size of the system grows. In this post, I will introduce the canonical algorithm for diagonalizing matrices in parallel computing to set the scene for today&rsquo;s main topic: improving diagonalization performance. With the help of benchmark calculations, I will then demonstrate how a clever mathematical library choice can easily reduce the time needed to diagonalize a matrix by at least 50 %.
+
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK">
+    <meta property="og:url" content="/2018/05/mpi-diagonalization/">
+    <meta property="og:site_name" content="Nico Holmberg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nico Holmberg">
+    <meta name="twitter:description" content="Matrix diagonalization is a fundamental linear algebra operation with a wide range of applications in scientific and other fields of computing. At the same time, it is also one of the most expensive operations with a formal computational complexity of $\mathcal{O}(N^3)$, which can become a significant performance bottleneck as the size of the system grows. In this post, I will introduce the canonical algorithm for diagonalizing matrices in parallel computing to set the scene for today&rsquo;s main topic: improving diagonalization performance. With the help of benchmark calculations, I will then demonstrate how a clever mathematical library choice can easily reduce the time needed to diagonalize a matrix by at least 50 %.
+
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png">
+    
+
+    
+      <meta property="og:image" content="https://res.cloudinary.com/nholmber/image/upload/v1525260786/toc_small_sirbri.png">
+    
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://nholmber.github.io/css/style-jsjn0006wyhpyzivf6yceb31gvpjatbcs3qzjvlumobfnugccvobqwxnnaj8.min.css" />
+    
+    
+
+    
+      
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-92528914-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://nholmber.github.io/">Nico Holmberg</a>
+  </div>
+  <link rel="shortcut icon" href="https://nholmber.github.io/favicon.ico?v=kPP08pKEXB" type="image/x-icon" />
+  
+    
+      <a class="header-right-picture "
+         href="https://nholmber.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/nholmber/image/upload/v1487079940/logo-circle-500x500_ap480i.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://nholmber.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Nico Holmberg</h4>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/profile">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-user"></i>
+      
+      <span class="sidebar-button-desc">Profile</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2018-05-02T00:00:00Z">
+        
+  May 2, 2018
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://nholmber.github.io/categories/parallel-programming">parallel programming</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>Matrix diagonalization is a fundamental linear algebra operation with a wide range of applications in scientific and other fields of computing. At the same time, it is also one of the most expensive operations with a formal <a href="https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations">computational complexity</a> of $\mathcal{O}(N^3)$, which can become a significant performance bottleneck as the size of the system grows. In this post, I will introduce the canonical algorithm for diagonalizing matrices in parallel computing to set the scene for today&rsquo;s main topic: improving diagonalization performance. With the help of benchmark calculations, I will then demonstrate how a clever mathematical library choice can easily reduce the time needed to diagonalize a matrix by at least 50 %.</p>
+
+<p></p>
+
+<p>It has been a hectic late winter&ndash;early spring for me as I have been gathering data for the last manuscript to be included in my Ph.D. thesis. Unfortunately, as a result, I haven&rsquo;t had the time to write any new posts in quite a while, although I had a number of topics already pre-planned. After a feverish couple weeks of writing, I can finally see the finish line in sight and I expect to have the manuscript submission ready in a few days. This has finally given me the opportunity to write up today&rsquo;s post.</p>
+
+<p>As mentioned above, this post will focus on matrix diagonalization in parallel computing. I will introduce a nifty library for drastically boosting diagonalization performance without requiring extensive code modifications. The algorithms involved are briefly discussed to give you an understanding of the origins of the speed improvement. This post concludes my three-part miniseries on parallel programming using the message passing interface (MPI) paradigm, at least for the foreseeable future. You can find my previous posts related to MPI I/O <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">here</a> and <a href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/">here</a>.</p>
+
+<p>PS. You might notice that some of the symbols and equations in this post have been typeset in $\LaTeX$-esque fashion (to see the proper font rendering, you need to enable JavaScript <i class="fa fa-smile-o" aria-hidden="true"></i>). I followed the instructions <a href="https://gohugo.io/content-management/formats/#mathjax-with-hugo">here</a> to enable <a href="https://docs.mathjax.org/en/latest/index.html">MathJax</a> in Hugo for displaying mathematical expressions. Note to other Hugo users interested in MathJax support, you might have to escape some characters you normally wouldn&rsquo;t to get an equation to render properly, e.g., subscripts need to be written as <code>B\_{11}</code>, not <code>B_{11}</code>.</p>
+
+<h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
+<ul>
+<li><a href="#intro">Representing matrices in parallel computing</a></li>
+<li><a href="#scalapack">Parallel matrix diagonalization with ScaLAPACK and ELPA</a></li>
+<li><a href="#benchmarking-elpa-against-scalapack">Benchmarking ELPA against ScaLAPACK</a></li>
+<li><a href="#conclusions">Conclusions</a></li>
+</ul>
+</nav>
+
+<h1 id="intro">Representing matrices in parallel computing</h1>
+
+<p>Before discussing how matrices are diagonalized, I will first take a small detour and describe how matrices are represented in MPI based parallel applications. If you are already familiar with the concepts, feel free to skip ahead to the next <a href="#scalapack">section</a>.</p>
+
+<p>Matrices with a large degree of nonzero elements, so-called full or dense matrices, are usually represented in <em>block cyclic</em> format in MPI applications. This format describes how to distribute a matrix over a set of $N$ processors. Note that other storage formats are often preferable for sparse matrices, where the majority of matrix elements are zero, but I won&rsquo;t cover sparse matrices or special algorithms for diagonalizing such matrices in this post.</p>
+
+<p>Let&rsquo;s take a closer look at the block cyclic format with the help of the following picture, which compares different cyclic and blocked distributions for one dimensional vectors and two dimensional matrices. The figure was taken from the excellent <a href="https://computing.llnl.gov/tutorials/parallel_comp/">&ldquo;Introduction to Parallel Computing&rdquo; tutorial</a> by Blaise Barney at the Lawrence Livermore National Laboratory.</p>
+
+<p><img src="https://res.cloudinary.com/nholmber/image/upload/v1524773513/distributions_emwgba.gif" alt="Matrix storage in parallel computing" />
+<strong>Figure 1.</strong> Comparison of cyclic and block formats for representing vectors and matrices in parallel over multiple processors. Each unique color represents a different processor. The colored segments indicate the portion of the full matrix that resides in the local memory of a processor. Picture source: <a href="https://computing.llnl.gov/tutorials/parallel_comp/">&ldquo;Introduction to Parallel Computing&rdquo; tutorial</a> by Blaise Barney at the Lawrence Livermore National Laboratory.</p>
+
+<p>In the cyclic decomposition of a matrix, each row, column or even every element of a matrix is distributed onto different processors, wrapping over the set of processors repeatedly until all elements of the matrix are exhausted. By contrast, in the block representation, the matrix is decomposed into $N$, not necessarily evenly sized, submatrices by diving the matrix along the rows, columns, or combinations of the two (&ldquo;blocks&rdquo;). Each submatrix is then assigned to a different processor.</p>
+
+<p>What are the advantages and disadvantages of these two distributions? Keep in mind that the original design philosophy behind MPI was to create a standardized parallel computing architecture for <a href="https://en.wikipedia.org/wiki/Distributed_memory">distributed memory</a> platforms. Consequently, each processor has its own private chunk of memory and if a processor needs to access a portion of the matrix that is not in the local memory, it must request the data from its owner via communication. The newer MPI-3 standard does allow direct shared memory programming (see e.g. <a href="https://software.intel.com/en-us/articles/an-introduction-to-mpi-3-shared-memory-programming">here</a>), but it might not be available on all platforms.</p>
+
+<p>Taking these notions into account, we see that the cyclic distribution is superior for evenly distributing a matrix, but poor for matrix manipulations because a lot of communication is required to access adjacent matrix elements that might reside on different processors. The opposite holds true for block decomposition: linear algebra can be executed efficiently on submatrix blocks that are contiguous in memory, but there might be load balancing issues e.g. if the matrix contains &ldquo;sparse&rdquo; regions. The block cyclic matrix distribution attempts to combine the best qualities of both representations by decomposing the matrix into smaller blocks that are cyclically distributed among processors.</p>
+
+<p>The most efficient block cyclic layout is a two dimensional layout where the total $N$ processors are arranged into a rectangular grid $N = N_{\mathrm{row}} \times N_{\mathrm{col}}$ with $N_{\mathrm{row}}$ rows and $N_{\mathrm{col}}$ columns. This distribution has been visualized below in Figure 2. The total number of matrix blocks is controlled by the size of each block, that is, the number of rows and columns included within each block. These quantities are user controllable and they often are set to the same value making the blocks square. The block sizes are adjusted accordingly in case the matrix is not evenly divisible by the total number of processors.</p>
+
+<p><img src="https://res.cloudinary.com/nholmber/image/upload/v1524773339/block_cyclic_kaqa8h.png" alt="Illustration of the two dimensional block cyclic layout" />
+<strong>Figure 2.</strong> Illustration of the two dimensional block cyclic layout. In this example, a matrix with $7 \times 10$ elements (the numbered entries), or more generally collections of elements, is distributed over a $2 \times 3$ processor grid. The colors indicate how elements in the global matrix are mapped onto different processors. The distribution on the right displays the processors&rsquo; local view of the matrix.</p>
+
+<p>The two dimensional block cyclic layout has been adopted in the general purpose dense matrix linear algebra package <a href="https://en.wikipedia.org/wiki/ScaLAPACK"><strong>ScaLAPACK</strong></a>. This package is a reference library, i.e., it has been tested extensively on different platforms but the numerical performance has not been optimized for a specific architecture. Computing vendors provide their own tuned versions of the library that target specific hardware, e.g. Intel MKL or Cray Libsci, which should always be used for production calculations if available due to the significant speed advantages they offer.</p>
+
+<h1 id="scalapack">Parallel matrix diagonalization with ScaLAPACK and ELPA</h1>
+
+<p>To recap, assume we are given a dense matrix $\boldsymbol{\mathrm{A}}$ that is distributed in parallel using MPI over a set of $N$ processors in block cyclic distribution (see <a href="#intro">above</a> if these concepts are unclear). Our task is to diagonalize $\boldsymbol{\mathrm{A}}$ and we would like to do it as efficiently as possible.</p>
+
+<p>Matrix diagonalization is intimately linked with eigenvalue problems and the <a href="https://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix">eigendecomposition</a> of a matrix. Concretely, we can define matrix diagonalization as finding the solution to the following eigenvalue problem</p>
+
+<p>$$ \boldsymbol{\mathrm{A}}\boldsymbol{\mathrm{X}}=\boldsymbol{\mathrm{X}}\boldsymbol{\mathrm{\Lambda}} $$</p>
+
+<p>where $\boldsymbol{\mathrm{X}}$ is a matrix that contains the eigenvectors of $\boldsymbol{\mathrm{A}}$ and $\boldsymbol{\mathrm{\Lambda}}$ is the eigenvalue matrix. The eigenvalue matrix contains the eigenvalues of $\boldsymbol{\mathrm{A}}$ on its diagonal and zeroes everywhere else. It, therefore, is the <em>actual</em> diagonal matrix we seek. As I shall subsequently show, computing the eigenvalue matrix requires less work than the eigenvector matrix. However, eigenvectors are often useful in their own right and it is very common that both must be computed.</p>
+
+<p>Depending on the properties of $\boldsymbol{\mathrm{A}}$, there are a variety of <a href="https://en.wikipedia.org/wiki/Eigenvalue_algorithm">eigenvalue algorithms</a> we could adopt to diagonalize the matrix. For the remainder of the post, I will assume that the matrix $\boldsymbol{\mathrm{A}}$ is a symmetric real matrix (or, analogously, complex Hermitian): $\boldsymbol{\mathrm{A}} = \boldsymbol{\mathrm{A}}^\mathrm{T}$. Such matrices frequently appear in applications especially in the fields of computational chemistry and physics.</p>
+
+<p>Dense matrix linear algebra packages that are based on ScaLAPACK offer <a href="https://software.intel.com/en-us/mkl-developer-reference-c-scalapack-driver-routines">three different algorithms</a> for diagonalizing real symmetric matrices, namely, the <code>p?syevd</code>, <code>p?syevx</code> and <code>p?syevr</code> methods where <code>?</code> accepts different values depending on the matrix data type, e.g., <code>d</code> for double precision matrices. These algorithms not only differ in the approach taken to diagonalize the matrix but also whether they are suitable for calculating only selected eigenvalues of the input matrix or whether all eigenvalues must always be computed.</p>
+
+<p>Let&rsquo;s examine the <code>p?syevd</code> algorithm in more detail by going through the main steps of the algorithm. For illustrative purposes, let $\boldsymbol{\mathrm{A}}$ be the following $6 \times 6 $ matrix
+$$
+ \boldsymbol{\mathrm{A}} =
+ \begin{bmatrix}
+  A_{11} &amp; A_{12} &amp; A_{13} &amp; A_{14} &amp; A_{15} &amp; A_{16}  \\<br />
+  A_{21} &amp; A_{22} &amp; A_{23} &amp; A_{24} &amp; A_{25} &amp; A_{26}  \\<br />
+  A_{31} &amp; A_{32} &amp; A_{33} &amp; A_{34} &amp; A_{35} &amp; A_{36}  \\<br />
+  A_{41} &amp; A_{42} &amp; A_{43} &amp; A_{44} &amp; A_{45} &amp; A_{46}  \\<br />
+  A_{51} &amp; A_{52} &amp; A_{53} &amp; A_{54} &amp; A_{55} &amp; A_{56}  \\<br />
+  A_{61} &amp; A_{62} &amp; A_{63} &amp; A_{64} &amp; A_{65} &amp; A_{66}
+ \end{bmatrix}
+$$</p>
+
+<p>The ScaLAPACK eigenvalue algorithm <code>p?syevd</code> is comprised of the following steps:</p>
+
+<ol>
+<li>Reduction to tridiagonal form $\boldsymbol{\mathrm{T}}$ with <a href="https://en.wikipedia.org/wiki/Householder_transformation#Tridiagonalization">Householder transformations</a> $\boldsymbol{\mathrm{Q}}$
+ $$
+  \boldsymbol{\mathrm{T}} = \boldsymbol{\mathrm{Q}}\boldsymbol{\mathrm{A}}\boldsymbol{\mathrm{Q}} =
+  \begin{bmatrix}
+   A_{11} &amp; A_{12} &amp; 0       &amp; \cdots  &amp; \cdots  &amp; 0        \\<br />
+   A_{21} &amp; A_{22} &amp; A_{23} &amp; \ddots  &amp; \ddots  &amp; \vdots   \\<br />
+    0      &amp; A_{32} &amp; A_{33} &amp; A_{34} &amp; \ddots  &amp; \vdots   \\<br />
+   \vdots  &amp; \ddots  &amp; A_{43} &amp; A_{44} &amp; A_{45} &amp; 0        \\<br />
+   \vdots  &amp; \ddots  &amp; \ddots  &amp; A_{54} &amp; A_{55} &amp; A_{56}  \\<br />
+   0       &amp; \cdots  &amp; \cdots  &amp; 0       &amp; A_{65} &amp; A_{66}
+  \end{bmatrix}
+ $$</li>
+<li>Solution of tridiagonal eigenvalue problem with <a href="https://en.wikipedia.org/wiki/Divide-and-conquer_eigenvalue_algorithm">divide-and-conquer (DQ) algorithm</a>
+ $$ \boldsymbol{\mathrm{T}}\tilde{\boldsymbol{\mathrm{X}}} = \tilde{\boldsymbol{\mathrm{X}}}\boldsymbol{\mathrm{\Lambda}} $$</li>
+<li>Backtransformation of eigenvectors
+ $$ \boldsymbol{\mathrm{X}} = \boldsymbol{\mathrm{Q}}^\mathrm{T}\tilde{\boldsymbol{\mathrm{X}}} $$</li>
+</ol>
+
+<p>The <code>p?syevx</code> and <code>p?syevr</code> methods differ from <code>p?syevd</code> in the second step of the algorithm: the former relies on bisection and inverse iteration, whereas the latter on the multiple relatively robust representations (MRRR) method. You can find more in-depth details about these two algorithms e.g. in this <a href="https://dl.acm.org/citation.cfm?id=1644002">paper</a>. Significant performance differences between these algorithms become apparent only when a subset of the eigenvalues are required, because <code>p?syevd</code> always returns the full set of eigenvalues, whereas the others are capable of computing individual eigenvalues. However, it is worth stressing that all eigenvalues are now necessary since our ultimate goal is to diagonalize the input matrix. In the remainder of this post, I will therefore exclusively discuss the DQ method based <code>p?syevd</code> algorithm.</p>
+
+<p>An alternative approach to improve the performance of the DQ ScaLAPACK algorithm would be to modify steps 1 and 3 of the algorithm, that is, the reduction to tridiagonal form and the backtransformation operation. This strategy has been adopted in the <a href="https://elpa.mpcdf.mpg.de/">Eigenvalues SoLvers for Petaflop-Applications</a> (ELPA) library. Specifically, the direct transformation to tridiagonal form is replaced by a two-step process, where the matrix is first converted to <a href="https://en.wikipedia.org/wiki/Band_matrix">banded form</a> (i.e. to a matrix with more than 1 sub- and superdiagonal), and the banded matrix is subsequently reduced to tridiagonal form. The backtransformation to a full matrix is modified in analogous fashion. These choices increase the fraction of matrix-matrix linear algebra operations performed during the transformation steps and minimize the fraction of matrix-vector operations, which should lead to overall better numerical performance in the diagonalization algorithm. An optional blocked QR decomposition can be performed for further speed improvements. A detailed description of the ELPA library is given in <a href="https://dx.doi.org/10.1088/0953-8984/26/21/213201">this review article</a>.</p>
+
+<p>ELPA offers a generic Fortran kernel that should work across different architectures, as well as a host of tuned kernels for modern CPUs that support e.g. AVX, AVX2, or AVX-512 instruction sets. Even a GPU kernel has recently been implemented. ELPA is compiled with the standard configure &amp; make approach. The interface to the ELPA diagonalization routine is very similar to the equivalent ScaLAPACK routine, which makes it a relatively straightforward task to include ELPA as an optional dependency in applications that already leverage ScaLAPACK for dense matrix diagonalization and other linear algebra operations.</p>
+
+<h1 id="benchmarking-elpa-against-scalapack">Benchmarking ELPA against ScaLAPACK</h1>
+
+<p>Matrix diagonalization performance, in general, depends on a variety of factors:</p>
+
+<ul>
+<li>Size of matrix (application dependent)</li>
+<li>Structure of matrix (application dependent)</li>
+<li>Number of processors used for diagonalization (user tunable setting)</li>
+<li>MPI block size for matrix (user tunable setting)</li>
+<li>Diagonalization algorithm (user tunable setting if implementation allows it)</li>
+</ul>
+
+<p>The first two factors are fixed for a given problem, while the latter three can be optimized at least to a degree by the user. In this section, I will compare the diagonalization performance of the ScaLAPACK <code>p?syevd</code> (as implemented in the Cray Libsci library) and ELPA algorithms. I will examine two square matrix sizes with $5888^2$ and $13034^2$ elements, respectively, and measure how the algorithms scale as the number of processors, $N$, is increased. The two methods will also be contrasted. The benchmark calculations are performed with the <a href="https://www.cp2k.org/">CP2K quantum chemistry software</a>. Each data point corresponds to the average diagonalization time obtained by diagonalizing the input matrix 10 times. The simulations were repeated twice to collect better timing statistics. The CP2K input files used in this post are based on standard benchmark input files distributed with the software. You can find them in full from this <a href="https://github.com/nholmber/hugo-www/tree/master/content-data/mpi-diag/example-inputs">link</a>.</p>
+
+<blockquote>
+<p><strong>Disclaimer</strong>: I am in no way affiliated with ELPA. I discovered the library when I was attempting to maximize the performance of my quantum chemistry simulations. An interface to ELPA was already implemented in CP2K and I merely extended it with new features.</p>
+</blockquote>
+
+<p>The benchmarks were run on a Cray XC40 supercomputer (<a href="https://research.csc.fi/sisu-supercomputer">&ldquo;Sisu&rdquo;</a>) where each computational node is comprised of two 12-core Intel Xeon E5-2690v3 processors with 64 GB DDR4 memory. The matrix block size is set to 64 in both row and column dimensions. The effect of using the optional QR decomposition step in the ELPA algorithm was also gauged. Note that the QR decomposition works only with even sized matrices whose block size is $\ge 64$. The 2017.05 version of ELPA and the AVX2_BLOCK2 kernel are used throughout.</p>
+
+<p>As a side note, CP2K by default limits the number of MPI processes used for diagonalization, because earlier benchmarks on a Cray XE6 machine have shown ScaLAPACK diagonalization performance to suffer when the matrix is parallelized onto too many processors relative to the size of the matrix. The &lsquo;optimal&rsquo; number of processes for diagonalization, $M$, is computed using the heuristic</p>
+
+<p>$$M = (K+a\times x-1)/(a\times x)\times a$$</p>
+
+<p>where $K$ is the size of the input matrix, and $a$ and $x$ are integers with default values $a=4$ and $x=60$. If $M \lt N$, the matrix is redistributed onto $M$ processors before diagonalizing it. With ELPA, redistribution of the input matrix is performed only in the event that the calculation would otherwise crash within the ELPA library due to overparallelization, which causes some processors to hold an empty matrix block. In addition to the tests discussed above, I have also estimated the effects of the optimal number of CPUs heuristic with ScaLAPACK by either disabling the check or by using the default values.</p>
+
+<p>The main benchmark results have been summarized in the figure below.</p>
+
+<p><img src="https://res.cloudinary.com/nholmber/image/upload/v1524645250/mpi_performance_loeyob.png" alt="Diagonalization performance: ScaLAPACK vs ELPA" />
+<strong>Figure 3.</strong>  Diagonalization performance with ScaLAPACK (SL) and ELPA as a function of the number of MPI nodes (multiples of 24 CPU cores). At left, results are shown for the larger matrix with $13034^2$ elements; at right, for the smaller matrix with $5888^2$ elements.</p>
+
+<p>These benchmarks demonstrate that ELPA is clearly faster than ScaLAPACK for diagonalizing a matrix in parallel. Depending on the number of processors used, ELPA outperforms ScaLAPACK by 60-80 % in the case of the larger matrix and by 50-70 % in the case of the smaller matrix. Using the optional QR decomposition feature of ELPA results in a further improvement, which interestingly becomes larger and larger as the number of processors grows. The diagonalization scalability saturates at 12 nodes for the larger system and at 4 nodes for the smaller system.</p>
+
+<p>I also tested the effectiveness of limiting the total number of MPI processors for diagonalization with ScaLAPACK. The results are shown in the figure below. At least for the tested systems, the redistribution strategy seems to be ineffective and using all available cores is the preferable choice even with ScaLAPACK. More extensive testing on different platforms and other systems is however required before deciding whether the redistribution step can safely be removed from CP2K.</p>
+
+<p><img src="https://res.cloudinary.com/nholmber/image/upload/v1524647409/sl_redistribute_performance_d9idyx.png" alt="ScaLAPACK: effect of redistribution strategy" />
+<strong>Figure 4.</strong> Total simulation runtime as a function of the number of MPI nodes (multiples of 24 CPU cores) with ScaLAPACK. The data marked in red was obtained by limiting the total number of processors used for diagonalization using the heuristic discussed above. At left, results are shown for the larger matrix with $13034^2$ elements (220 core limit); at right, for the smaller matrix with $5888^2$ elements (100 core limit).</p>
+
+<h1 id="conclusions">Conclusions</h1>
+
+<p>In this post, I discussed algorithms for diagonalizing dense matrices in the context of MPI parallelized, distributed memory applications. I showed that the algorithm implemented in the ELPA library clearly outperforms the ScaLAPACK equivalent by at least 50 %. Because the diagonalization routine interface in ELPA is very similar to ScaLAPACK, introducing ELPA as an optional replacement for ScaLAPACK in diagonalization intensive MPI applications should be relatively straightforward to implement and could lead to significant savings in computational time.</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/cp2k/">CP2K</a>
+
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/mpi/">MPI</a>
+
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/computational-chemistry/">computational chemistry</a>
+
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/high-performance-computing/">high-performance computing</a>
+
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/linear-algebra/">linear algebra</a>
+
+                  </div>
+                
+              
+            
+            
+  <div class="post-actions-wrap">
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nholmber.github.io/2018/01/cp2k-uk-2018-recap/" data-tooltip="A recap of the CP2K-UK 2018 meeting">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nholmber.github.io/2018/05/mpi-diagonalization/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nholmber.github.io/2018/05/mpi-diagonalization/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nholmber.github.io/2018/05/mpi-diagonalization/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2018 Nico Holmberg. Powered by <a href="https://gohugo.io">Hugo</a> and the <a href="https://themes.gohugo.io/hugo-tranquilpeak-theme">Tranquilpeak</a> theme. All Rights Reserved
+  </span>
+
+  <script type="text/javascript" async
+		src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML">
+		MathJax.Hub.Config({
+		tex2jax: {
+		inlineMath: [['$','$'], ['\\(','\\)']],
+		displayMath: [['$$','$$']],
+		processEscapes: true,
+		processEnvironments: true,
+		skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+		TeX: { equationNumbers: { autoNumber: "AMS" },
+		     extensions: ["AMSmath.js", "AMSsymbols.js"] }
+		}
+		});
+		MathJax.Hub.Queue(function() {
+		
+		
+		
+		var all = MathJax.Hub.getAllJax(), i;
+		for(i = 0; i < all.length; i += 1) {
+		    all[i].SourceElement().parentNode.className += ' has-jax';
+		}
+		});
+		MathJax.Hub.Config({
+		
+		TeX: { equationNumbers: { autoNumber: "AMS" } }
+		});
+	</script>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        
+  <div class="post-actions-wrap">
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nholmber.github.io/2018/01/cp2k-uk-2018-recap/" data-tooltip="A recap of the CP2K-UK 2018 meeting">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nholmber.github.io/2018/05/mpi-diagonalization/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nholmber.github.io/2018/05/mpi-diagonalization/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nholmber.github.io/2018/05/mpi-diagonalization/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnholmber.github.io%2F2018%2F05%2Fmpi-diagonalization%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fnholmber.github.io%2F2018%2F05%2Fmpi-diagonalization%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fnholmber.github.io%2F2018%2F05%2Fmpi-diagonalization%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Nico Holmberg</h4>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Doctoral Student, Computational Chemistry
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Espoo, Finland
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2018/05/mpi-diagonalization/">
+                <h3 class="media-heading">Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Matrix diagonalization is a fundamental linear algebra operation with a wide range of applications in scientific and other fields of computing. At the same time, it is also one of the most expensive operations with a formal <a href="https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations">computational complexity</a> of $\mathcal{O}(N^3)$, which can become a significant performance bottleneck as the size of the system grows. In this post, I will introduce the canonical algorithm for diagonalizing matrices in parallel computing to set the scene for today&rsquo;s main topic: improving diagonalization performance. With the help of benchmark calculations, I will then demonstrate how a clever mathematical library choice can easily reduce the time needed to diagonalize a matrix by at least 50 %.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2018/01/cp2k-uk-2018-recap/">
+                <h3 class="media-heading">A recap of the CP2K-UK 2018 meeting</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>The 2018 edition of the <a href="https://www.cp2k.org/events:2018_user_meeting:index">CP2K UK user meeting</a> was held two Fridays ago at the University of Lincoln, UK. I will be recaping my experiences of the event in this post.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/12/cp2k-uk-2018/">
+                <h3 class="media-heading">Constrained DFT tutorial at the CP2K-UK 2018 meeting</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Dec 12, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>I will be giving an introductory how-to talk on constrained DFT at the <a href="https://tinyurl.com/CP2K-2018">2018 CP2K UK User meeting</a> at the University of Lincoln, UK, on Friday January 12 2018.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/">
+                <h3 class="media-heading">Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Dec 12, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>In my previous <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">post</a>, I discussed the benefits of using the message passing interface (MPI) to parse large data files in parallel over multiple processors. In today&rsquo;s post, I will demonstrate how MPI I/O operations can be further accelerated by introducing the concept of hints. The second topic I will discuss is the emergence of solid-state drives in high-performance computing systems to resolve I/O bottlenecks. These topics will be illustrated by benchmark calculations using a parallel writer routine that I will implement to the <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">task described previously</a>.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/05/mpi-io-cube/">
+                <h3 class="media-heading">Parallelizing I/O operations with MPI: A case study with volumetric data</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Lately, parsing volumetric data from large (&gt; 300 MB) text files has been a computational bottleneck in my simulations. Because I expect to be processing hundreds of these files, I decided to parallelize the parser routine by leveraging the <a href="https://en.wikipedia.org/wiki/Message_Passing_Interface">message passing interface</a> (MPI). I will describe my first experience with MPI I/O in this post by going through the synthesis process of the parallelized parser routine. I will also examine the performance of the parallel parser.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/04/cp2k-build-cray-xc40/">
+                <h3 class="media-heading">Building CP2K on a Cray XC40</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Compiling a <a href="https://www.cp2k.org/">CP2K</a> binary &ndash; the massively parallel, open-source quantum chemistry and solid state physics program written in Fortran 2003 &ndash; can be a daunting task if you&rsquo;ve never built a large project using <a href="https://en.wikipedia.org/wiki/Make_(software)">maketools</a>. This post aims to demystify the build process by showcasing a full CP2K build on a Cray XC40 supercomputer (codename <a href="https://research.csc.fi/sisu-supercomputer"><em>Sisu</em></a>) including dependencies.
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/02/welcome/">
+                <h3 class="media-heading">Welcome to my website!</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Feb 2, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Greetings and welcome! You have stumbled upon the personal website and blog of Nico Holmberg, a 26 year old Finn pursuing a doctoral degree in Computational Quantum Chemistry. Feel free to check out my <a href="../../../profile">profile</a> for more information about me, my professional projects and other interests!
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         7 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/nholmber/image/upload/v1487095700/sidebar_nefvej.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://nholmber.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/nholmber.github.io\/2018\/05\/mpi-diagonalization\/';
+          
+            this.page.identifier = '\/2018\/05\/mpi-diagonalization\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'nholmber';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+    
+  </body>
+</html>
+

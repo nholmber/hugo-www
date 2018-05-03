@@ -196,6 +196,64 @@ ga('send', 'pageview');
 
   
 
+<article class="postShorten postShorten--thumbnailimg-left" itemscope itemType="http://schema.org/BlogPosting">
+  <div class="postShorten-wrap">
+    
+    <div class="postShorten-header">
+      <h1 class="postShorten-title" itemprop="headline">
+        <a class="link-unstyled" href="https://nholmber.github.io/2018/05/mpi-diagonalization/">
+          Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK
+        </a>
+      </h1>
+      
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2018-05-02T00:00:00Z">
+        
+  May 2, 2018
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://nholmber.github.io/categories/parallel-programming">parallel programming</a>
+    
+  
+
+  </div>
+
+    </div>
+    <div class="postShorten-excerpt" itemprop="articleBody">
+      <p>Matrix diagonalization is a fundamental linear algebra operation with a wide range of applications in scientific and other fields of computing. At the same time, it is also one of the most expensive operations with a formal <a href="https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations">computational complexity</a> of $\mathcal{O}(N^3)$, which can become a significant performance bottleneck as the size of the system grows. In this post, I will introduce the canonical algorithm for diagonalizing matrices in parallel computing to set the scene for today&rsquo;s main topic: improving diagonalization performance. With the help of benchmark calculations, I will then demonstrate how a clever mathematical library choice can easily reduce the time needed to diagonalize a matrix by at least 50 %.</p>
+
+<p></p>
+      <p>
+        <a href="https://nholmber.github.io/2018/05/mpi-diagonalization/" class="postShorten-excerpt_link link">Continue reading</a>
+        
+      </p>
+    </div>
+  </div>
+  
+    <a href="https://nholmber.github.io/2018/05/mpi-diagonalization/">
+      <div class="postShorten-thumbnailimg">
+        <img alt="" itemprop="image" src="https://res.cloudinary.com/nholmber/image/upload/v1525260786/toc_small_sirbri.png"/>
+      </div>
+    </a>
+  
+</article>
+
+            
+              
+  
+    
+  
+
+
+  
+
 <article class="postShorten postShorten--thumbnailimg-top" itemscope itemType="http://schema.org/BlogPosting">
   <div class="postShorten-wrap">
     
@@ -420,64 +478,24 @@ ga('send', 'pageview');
 </article>
 
             
-              
-  
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-top" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-      <a href="https://nholmber.github.io/2017/04/cp2k-build-cray-xc40/">
-        <div class="postShorten-thumbnailimg">
-          <img alt="" itemprop="image" src="https://nholmber.github.io/false"/>
-        </div>
-      </a>
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://nholmber.github.io/2017/04/cp2k-build-cray-xc40/">
-          Building CP2K on a Cray XC40
-        </a>
-      </h1>
+            
+  <div class="pagination-bar">
+    <ul class="pagination">
       
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2017-04-26T00:00:00Z">
         
-  April 26, 2017
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://nholmber.github.io/categories/computational-chemistry">computational chemistry</a>
-    
-  
-
+        
+          <li class="pagination-next">
+            <a class="btn btn--default btn--small" href="https://nholmber.github.io/tags/cp2k/page/2/">
+              <span>OLDER POSTS</span>
+              <i class="fa fa-angle-right text-base icon-ml"></i>
+            </a>
+          </li>
+        
+      
+      <li class="pagination-number">page 1 of 2</li>
+    </ul>
   </div>
 
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      <p>Compiling a <a href="https://www.cp2k.org/">CP2K</a> binary &ndash; the massively parallel, open-source quantum chemistry and solid state physics program written in Fortran 2003 &ndash; can be a daunting task if you&rsquo;ve never built a large project using <a href="https://en.wikipedia.org/wiki/Make_(software)">maketools</a>. This post aims to demystify the build process by showcasing a full CP2K build on a Cray XC40 supercomputer (codename <a href="https://research.csc.fi/sisu-supercomputer"><em>Sisu</em></a>) including dependencies.
-</p>
-      <p>
-        <a href="https://nholmber.github.io/2017/04/cp2k-build-cray-xc40/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-            
-            
 
           </section>
         
@@ -485,6 +503,34 @@ ga('send', 'pageview');
   <span class="copyrights">
     &copy; 2018 Nico Holmberg. Powered by <a href="https://gohugo.io">Hugo</a> and the <a href="https://themes.gohugo.io/hugo-tranquilpeak-theme">Tranquilpeak</a> theme. All Rights Reserved
   </span>
+
+  <script type="text/javascript" async
+		src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML">
+		MathJax.Hub.Config({
+		tex2jax: {
+		inlineMath: [['$','$'], ['\\(','\\)']],
+		displayMath: [['$$','$$']],
+		processEscapes: true,
+		processEnvironments: true,
+		skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+		TeX: { equationNumbers: { autoNumber: "AMS" },
+		     extensions: ["AMSmath.js", "AMSsymbols.js"] }
+		}
+		});
+		MathJax.Hub.Queue(function() {
+		
+		
+		
+		var all = MathJax.Hub.getAllJax(), i;
+		for(i = 0; i < all.length; i += 1) {
+		    all[i].SourceElement().parentNode.className += ' has-jax';
+		}
+		});
+		MathJax.Hub.Config({
+		
+		TeX: { equationNumbers: { autoNumber: "AMS" } }
+		});
+	</script>
 </footer>
 
       </div>
@@ -535,6 +581,25 @@ ga('send', 'pageview');
       <div class="no-result text-color-light text-center">no post found</div>
       <div class="results">
         
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2018/05/mpi-diagonalization/">
+                <h3 class="media-heading">Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Matrix diagonalization is a fundamental linear algebra operation with a wide range of applications in scientific and other fields of computing. At the same time, it is also one of the most expensive operations with a formal <a href="https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations">computational complexity</a> of $\mathcal{O}(N^3)$, which can become a significant performance bottleneck as the size of the system grows. In this post, I will introduce the canonical algorithm for diagonalizing matrices in parallel computing to set the scene for today&rsquo;s main topic: improving diagonalization performance. With the help of benchmark calculations, I will then demonstrate how a clever mathematical library choice can easily reduce the time needed to diagonalize a matrix by at least 50 %.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
         
           <div class="media">
             
@@ -655,7 +720,7 @@ ga('send', 'pageview');
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         6 posts found
+         7 posts found
       </p>
     </div>
   </div>

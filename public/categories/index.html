@@ -197,11 +197,11 @@ ga('send', 'pageview');
             
               
                 <div>
-                  <a href="#posts-list-conferences" class="category-anchor" data-category="conferences">conferences</a>
+                  <a href="#posts-list-parallel-programming" class="category-anchor" data-category="parallel-programming">parallel-programming</a>
                 </div>
               
                 <div>
-                  <a href="#posts-list-parallel-programming" class="category-anchor" data-category="parallel-programming">parallel-programming</a>
+                  <a href="#posts-list-conferences" class="category-anchor" data-category="conferences">conferences</a>
                 </div>
               
                 <div>
@@ -216,6 +216,42 @@ ga('send', 'pageview');
           </section>
           <section class="boxes">
             
+              
+              <div id="posts-list-parallel-programming" class="archive box" data-category="parallel-programming" style="display: block;">
+                <h4 class="archive-title text-xlarge">
+                  <a class="link-unstyled" href="parallel-programming">parallel-programming (3)</a>
+                </h4>
+                <ul class="archive-posts">
+                  
+                    <li class="archive-post">
+                      <a class="archive-post-title" href="https://nholmber.github.io/2017/05/mpi-io-cube/">
+                        Parallelizing I/O operations with MPI: A case study with volumetric data
+                      </a>
+                      <span class="archive-post-date"> - 
+  May 4, 2017
+</span>
+                    </li>
+                  
+                    <li class="archive-post">
+                      <a class="archive-post-title" href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/">
+                        Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer
+                      </a>
+                      <span class="archive-post-date"> - 
+  December 22, 2017
+</span>
+                    </li>
+                  
+                    <li class="archive-post">
+                      <a class="archive-post-title" href="https://nholmber.github.io/2018/05/mpi-diagonalization/">
+                        Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK
+                      </a>
+                      <span class="archive-post-date"> - 
+  May 2, 2018
+</span>
+                    </li>
+                  
+                </ul>
+              </div>
               
               <div id="posts-list-conferences" class="archive box" data-category="conferences" style="display: block;">
                 <h4 class="archive-title text-xlarge">
@@ -238,33 +274,6 @@ ga('send', 'pageview');
                       </a>
                       <span class="archive-post-date"> - 
   January 21, 2018
-</span>
-                    </li>
-                  
-                </ul>
-              </div>
-              
-              <div id="posts-list-parallel-programming" class="archive box" data-category="parallel-programming" style="display: block;">
-                <h4 class="archive-title text-xlarge">
-                  <a class="link-unstyled" href="parallel-programming">parallel-programming (2)</a>
-                </h4>
-                <ul class="archive-posts">
-                  
-                    <li class="archive-post">
-                      <a class="archive-post-title" href="https://nholmber.github.io/2017/05/mpi-io-cube/">
-                        Parallelizing I/O operations with MPI: A case study with volumetric data
-                      </a>
-                      <span class="archive-post-date"> - 
-  May 4, 2017
-</span>
-                    </li>
-                  
-                    <li class="archive-post">
-                      <a class="archive-post-title" href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/">
-                        Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer
-                      </a>
-                      <span class="archive-post-date"> - 
-  December 22, 2017
 </span>
                     </li>
                   
@@ -314,6 +323,34 @@ ga('send', 'pageview');
   <span class="copyrights">
     &copy; 2018 Nico Holmberg. Powered by <a href="https://gohugo.io">Hugo</a> and the <a href="https://themes.gohugo.io/hugo-tranquilpeak-theme">Tranquilpeak</a> theme. All Rights Reserved
   </span>
+
+  <script type="text/javascript" async
+		src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML">
+		MathJax.Hub.Config({
+		tex2jax: {
+		inlineMath: [['$','$'], ['\\(','\\)']],
+		displayMath: [['$$','$$']],
+		processEscapes: true,
+		processEnvironments: true,
+		skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+		TeX: { equationNumbers: { autoNumber: "AMS" },
+		     extensions: ["AMSmath.js", "AMSsymbols.js"] }
+		}
+		});
+		MathJax.Hub.Queue(function() {
+		
+		
+		
+		var all = MathJax.Hub.getAllJax(), i;
+		for(i = 0; i < all.length; i += 1) {
+		    all[i].SourceElement().parentNode.className += ' has-jax';
+		}
+		});
+		MathJax.Hub.Config({
+		
+		TeX: { equationNumbers: { autoNumber: "AMS" } }
+		});
+	</script>
 </footer>
 
       </div>
