@@ -1,8 +1,8 @@
 +++
 tags = ["machine learning", "javascript", "python", "HTML", "Google Maps"]
 categories = ["machine learning"]
-archives = ["2018-07"]
-date = "2018-07-27"
+archives = ["2018-08"]
+date = "2018-08-09"
 title = "Visualizing Geographic Statistical Data with Google Maps"
 keywords = ["machine learning", "javascript", "python", "HTML", "Google Maps"]
 autoThumbnailImage = "false"
@@ -67,6 +67,7 @@ Let me start this post by showcasing the final map that we will build towards in
   </div>
 </div>
 
+{{< youtube sun6m9v6XB4 >}}
 
 <!-- toc -->
 
