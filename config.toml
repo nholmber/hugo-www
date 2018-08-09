@@ -137,6 +137,7 @@ canonifyurls = true
   # Set this value to `true` if you have old posts that use the cover image or the first photo as the thumbnail image
   # and set `autoThumbnailImage` to `false` on a post to overwrite this setting
   autoThumbnailImage = true
+  favicon = "/favicon.png"
 
   # Header configuration
   # The link at the right of the header is customizable
