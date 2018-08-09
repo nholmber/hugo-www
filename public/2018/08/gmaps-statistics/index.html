@@ -1,0 +1,1586 @@
+
+
+  
+    
+  
+
+
+  
+
+
+
+
+
+  
+
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hugo 0.26 with theme Tranquilpeak 0.4.3-BETA">
+    <title>Visualizing Geographic Statistical Data with Google Maps</title>
+    <meta name="author" content="Nico Holmberg">
+    <meta name="keywords" content="machine learning, javascript, python, HTML, Google Maps">
+
+    <link rel="icon" href="https://nholmber.github.io/favicon.png">
+    
+
+    
+    <meta name="description" content="This tutorial will teach you how to create a custom Google Maps based map for visualizing geographic statistical data. Such maps can be a useful tool when developing machine learning models. As a specific example case, we will create a map for visualizing the population density and median household income of postal code areas in Finland.
+
+">
+    <meta property="og:description" content="This tutorial will teach you how to create a custom Google Maps based map for visualizing geographic statistical data. Such maps can be a useful tool when developing machine learning models. As a specific example case, we will create a map for visualizing the population density and median household income of postal code areas in Finland.
+
+">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Visualizing Geographic Statistical Data with Google Maps">
+    <meta property="og:url" content="/2018/08/gmaps-statistics/">
+    <meta property="og:site_name" content="Nico Holmberg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Nico Holmberg">
+    <meta name="twitter:description" content="This tutorial will teach you how to create a custom Google Maps based map for visualizing geographic statistical data. Such maps can be a useful tool when developing machine learning models. As a specific example case, we will create a map for visualizing the population density and median household income of postal code areas in Finland.
+
+">
+    
+    
+
+    
+    
+
+    
+      <meta property="og:image" content="https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png">
+    
+
+    
+      <meta property="og:image" content="https://res.cloudinary.com/nholmber/image/upload/v1533321553/gmaps-3_cc3fxg.png">
+    
+    
+    
+
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://nholmber.github.io/css/style-jsjn0006wyhpyzivf6yceb31gvpjatbcs3qzjvlumobfnugccvobqwxnnaj8.min.css" />
+    
+    
+
+    
+      
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-92528914-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://nholmber.github.io/">Nico Holmberg</a>
+  </div>
+  <link rel="shortcut icon" href="https://nholmber.github.io/favicon.ico?v=kPP08pKEXB" type="image/x-icon" />
+  
+    
+      <a class="header-right-picture "
+         href="https://nholmber.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/nholmber/image/upload/v1487079940/logo-circle-500x500_ap480i.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://nholmber.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Nico Holmberg</h4>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/profile">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-user"></i>
+      
+      <span class="sidebar-button-desc">Profile</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://nholmber.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Visualizing Geographic Statistical Data with Google Maps
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2018-08-09T00:00:00Z">
+        
+  August 9, 2018
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://nholmber.github.io/categories/machine-learning">machine learning</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>This tutorial will teach you how to create a custom Google Maps based map for visualizing geographic statistical data. Such maps can be a useful tool when developing machine learning models. As a specific example case, we will create a map for visualizing the population density and median household income of postal code areas in Finland.</p>
+
+<p></p>
+
+<p>Geographic statistical data, such as economic and population related statistics, is collected into databases on national and regional levels by governmental and other agencies. The public availability of these statistics is appealing for the development of machine learning models, for instance, to predict how housing prices will evolve in the future.</p>
+
+<p>A key part of any machine learning project is visualizing the input data. Google Maps is a natural tool to visualize statistics with a geographic aspect because a vast majority of people have a pre-existing familiarity with the platform. Why Google Maps you might ask and not some alternative service or library. I admit that this approach is probably overkill for static data plotting, i.e., if your intention is to create a map for a written report. However, using Google Maps for data visualization really excels if you want to create an interactive website, or even a fully fledged web app, and share it with others.</p>
+
+<p>Let me start this post by showcasing the final map that we will build towards in this post. I&rsquo;ve also included a short YouTube video below because screenshots don&rsquo;t do interactive websites justice, as you might well imagine. You can find the code described in this post in full on <a href="https://github.com/nholmber/google-maps-statistics">GitHub</a> in case you want jump right into the details and reproduce a working copy of the map. In the sections below, I will go through the main steps of the map creation process in more detail.</p>
+
+<div class="image-gallery">
+  <div class="image-gallery-metabar">
+    <span>Showcase: Using Google Maps to visualize geographic data. Map data ©2018 Google.</span>
+  </div>
+  <div class="image-gallery-photos image-gallery-photos--thumbnail">
+    <div class="photo-box" >
+      <a class="photo-box-inner fancybox" data-fancybox-group="gallery-f5ec416eb1d03d07abf156e1d435db4d"
+         title="" href="https://res.cloudinary.com/nholmber/image/upload/v1533321555/gmaps-4_irvi3h.png">
+        <img class="photo" src="https://res.cloudinary.com/nholmber/image/upload/v1533321555/gmaps-4_irvi3h.png" itemprop="image">
+      </a>
+    </div>
+    <div class="photo-box">
+      <a class="photo-box-inner fancybox" data-fancybox-group="gallery-f5ec416eb1d03d07abf156e1d435db4d"
+         title="" href="https://res.cloudinary.com/nholmber/image/upload/v1533321558/gmaps-2_dmfdnn.png">
+        <img class="photo" src="https://res.cloudinary.com/nholmber/image/upload/v1533321558/gmaps-2_dmfdnn.png" itemprop="image">
+      </a>
+    </div>
+    <div class="photo-box">
+      <a class="photo-box-inner fancybox" data-fancybox-group="gallery-f5ec416eb1d03d07abf156e1d435db4d"
+         title="" href="https://res.cloudinary.com/nholmber/image/upload/v1533321553/gmaps-3_cc3fxg.png">
+        <img class="photo" src="https://res.cloudinary.com/nholmber/image/upload/v1533321553/gmaps-3_cc3fxg.png" itemprop="image">
+      </a>
+    </div>
+    <div class="photo-box">
+      <a class="photo-box-inner fancybox" data-fancybox-group="gallery-f5ec416eb1d03d07abf156e1d435db4d"
+         title="" href="https://res.cloudinary.com/nholmber/image/upload/v1533321554/gmaps-1_zjqilx.png">
+        <img class="photo" src="https://res.cloudinary.com/nholmber/image/upload/v1533321554/gmaps-1_zjqilx.png" itemprop="image">
+      </a>
+    </div>
+    <div class="photo-box">
+      <a class="photo-box-inner fancybox" data-fancybox-group="gallery-f5ec416eb1d03d07abf156e1d435db4d"
+         title="" href="https://res.cloudinary.com/nholmber/image/upload/v1533321556/gmaps-6_v3koyw.png">
+        <img class="photo" src="https://res.cloudinary.com/nholmber/image/upload/v1533321556/gmaps-6_v3koyw.png" itemprop="image">
+      </a>
+    </div>
+    <div class="photo-box">
+      <a class="photo-box-inner fancybox" data-fancybox-group="gallery-f5ec416eb1d03d07abf156e1d435db4d"
+         title="" href="https://res.cloudinary.com/nholmber/image/upload/v1533321555/gmaps-5_hqo9cj.png">
+        <img class="photo" src="https://res.cloudinary.com/nholmber/image/upload/v1533321555/gmaps-5_hqo9cj.png" itemprop="image">
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
+  <iframe src="//www.youtube.com/embed/sun6m9v6XB4" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" allowfullscreen frameborder="0"></iframe>
+ </div>
+
+
+<h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
+<ul>
+<li><a href="#prelude-the-google-maps-javascript-api">Prelude: the Google Maps JavaScript API</a></li>
+<li><a href="#obtaining-and-processing-geographic-data-prior-to-visualization">Obtaining and processing geographic data prior to visualization</a></li>
+<li><a href="#creating-a-custom-google-maps-based-map">Creating a custom Google Maps based map</a>
+<ul>
+<li><a href="#1-restyling-google-maps">1. Restyling Google Maps</a></li>
+<li><a href="#2-creating-a-data-layer-object-and-accessing-its-properties">2. Creating a Data Layer object and accessing its properties</a></li>
+<li><a href="#2-button-for-switching-between-visualizations">2. Button for switching between visualizations</a></li>
+<li><a href="#3-info-window">3. Info window</a></li>
+<li><a href="#4-legend">4. Legend</a></li>
+</ul></li>
+<li><a href="#final-ingredient-embedding-js-in-a-html-file">Final ingredient: Embedding JS in a HTML file</a></li>
+</ul>
+</nav>
+
+<h1 id="prelude-the-google-maps-javascript-api">Prelude: the Google Maps JavaScript API</h1>
+
+<p>While parts of the Google Maps Services are accessible natively through a <a href="https://github.com/googlemaps/google-maps-services-python">Python</a> client, building custom Google Maps or building apps on top of such maps is possible only through the <a href="https://developers.google.com/maps/documentation/javascript/tutorial">JavaScript (JS) API</a>. The documentation provides plenty of examples to familiarize you with the different functionalities of the API. No prior knowledge of JS is required.</p>
+
+<p>Before you can get started on building your own Google Maps based maps, you need to obtain <a href="https://developers.google.com/maps/documentation/javascript/get-api-key">an API key</a> by registering an account/project on the <a href="https://cloud.google.com/maps-platform">Google Could platform</a>. Registration is free, although a credit card is required, as is using the actual Google Maps platform up to a 200 $ monthly credit limit. The free quota should be more than sufficient for small personal projects: I used about a dollars worth of quota while creating and testing the map described in this post. Actual quota usage depends on the number of calls to different components of the JS API, which can be monitored in real time via an online console. Pricing information for larger projects is available <a href="https://cloud.google.com/maps-platform/pricing/sheet/">here</a> if your interested.</p>
+
+<h1 id="obtaining-and-processing-geographic-data-prior-to-visualization">Obtaining and processing geographic data prior to visualization</h1>
+
+<p>As mentioned in the introduction, I will be considering two different statistics in this post: the population density (in inhabitants/km$ \mathrm{^2}$, data from 2018) and the median household income relative to the national average (in €, data from 2015). The statistics will be visualized in geographic areas defined by Finnish postal code areas. The relevant raw data was downloaded from a public database hosted by <a href="https://www.stat.fi/org/index_en.html">Statistics Finland</a>, the national statistical institution of Finland that collects, maintains and publishes roughly 160 sets of different statistics. The data used in this post was accessed through the <a href="https://www.stat.fi/tup/paavo/index_en.html">Paavo - Open data by postal code area</a> service, licensed under CC BY 4.0.</p>
+
+<blockquote>
+<p><strong>Mandatory license disclaimer.</strong> The statistics (population, population growth, median income) and postal code information (names, boundaries, areas) used in this post were downloaded from the Paavo portal, offered by <a href="http://www.stat.fi/tup/paavo/index_en.html">Statistics Finland</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/deed.en">CC BY 4.0</a>. Data accessed July 27, 2018.</p>
+</blockquote>
+
+<p>Before going through the actual data processing procedure, let&rsquo;s first discuss how custom data can be included in Google Maps. The high-level object that can hold user created geographic data is the so called <a href="https://developers.google.com/maps/documentation/javascript/layers">Layer object</a>. There are several types of layers available, including Fusion Tables, KML elements, and the Data Layer container which can hold arbitrary geospatial data. I have opted for the last option, namely, the Data Layer container. The properties of this object can be defined and manipulated directly with JS, but a convenient alternative is to import the data from a <a href="https://en.wikipedia.org/wiki/GeoJSON">GeoJSON</a> file.</p>
+
+<p>What&rsquo;s a GeoJSON file you might wonder. Well, a GeoJSON file is many respects just a regular JSON file but with added objects to represent geographical features as points, lines, polygons and collections of these attributes. A postal code area, for instance, can be represented as a MultiPolygon object, which is a set of regular Polygon objects. With this object, it doesn&rsquo;t matter if the zip code area is fully connected or whether it is made up of several disjoint sections (e.g. a group of islands). Additional variables can be declared and associated with these geometric features, allowing postal code specific statistical data to be encoded directly into this object. To illustrate how nifty this file format is, here&rsquo;s an example of a shortened GeoJSON file (I used <a href="http://geojson.io/#map=2/20.0/0.0">this tool</a> to prettify the file and kept only two vertices of the Polygon object):</p>
+
+
+  
+  
+  
+  
+
+
+<figure class="highlight json language-json">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-json"><code class="json">{
+  &#34;type&#34;: &#34;FeatureCollection&#34;,
+  &#34;features&#34;: [
+    {
+      &#34;type&#34;: &#34;Feature&#34;,
+      &#34;properties&#34;: {
+        &#34;zip&#34;: &#34;00300&#34;,
+        &#34;name&#34;: &#34;Pikku Huopalahti&#34;,
+        &#34;area&#34;: 0.851105,
+        &#34;pop2018&#34;: 5794,
+        &#34;income&#34;: 23737,
+        &#34;income_relative&#34;: 4123.18,
+        &#34;pop_density&#34;: 6807.62,
+        &#34;fill&#34;: &#34;#c7e0ed&#34;,
+        &#34;fill_density&#34;: &#34;#840711&#34;
+      },
+      &#34;geometry&#34;: {
+        &#34;type&#34;: &#34;MultiPolygon&#34;,
+        &#34;coordinates&#34;: [
+          [
+            [
+              [
+                24.89407088925189,
+                60.1972300444163
+              ],
+              [
+                24.890401201643467,
+                60.197875777415035
+              ]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>The GeoJSON file is a collection of <code>Features</code> which in this case correspond to the various Finnish postal code areas. Each <code>Feature</code> has two main components: a dictionary of properties (<code>properties</code>) and the <code>geometry</code> object which defines the postal code area MultiPolygon object in Google Maps compatible latitude/longitude coordinates. As you can see, we have defined a bunch of variables in the <code>properties</code> dictionary:</p>
+
+<ul>
+<li><code>name</code>, <code>zip</code> code, surface <code>area</code>, population (<code>pop2018</code>), and median household <code>income</code> of the postal code area. The data to populate these variables were obtained from the database discussed earlier in this post.</li>
+<li><code>income_relative</code>: median income relative to national average (in €, with positive values indicating higher than average income)</li>
+<li>population density <code>pop_density = pop2018/area</code></li>
+<li>two fill colors <code>fill</code> (representing relative income) and <code>fill_density</code> (population density): these will be used to color the postal code areas in Google Maps to illustrate how the quantities vary in different areas of Finland</li>
+</ul>
+
+<p>All right, we have now covered how to define and include custom geographic data in Google Maps. We are ready to go through the actual steps necessary to create the map showcased at the beginning of this post. Here is the strategy that we will adopt</p>
+
+<ol>
+<li>Download and process data</li>
+<li>Save data as a GeoJSON file and upload data online</li>
+<li>Create JS for importing GeoJSON into Google Maps and subsequently visualizing the data</li>
+<li>Embed JS in a HTML file to create a working map as a website</li>
+</ol>
+
+<p>Let&rsquo;s first take a closer look at steps 1-2. I&rsquo;ve used standard Python tools for these steps, namely, <a href="https://pandas.pydata.org/">Pandas</a>/<a href="https://geopandas.org/">GeoPandas</a>/<a href="https://www.numpy.org/">Numpy</a> for downloading and processing the data and <a href="https://matplotlib.org/">Matplotlib</a> for creating the color schemes that will subsequently be used to color the different postal code areas in Google Maps. Overall, this process was quite straightforward but there were slight caveats I&rsquo;d like to highlight below. You can find the code in full on <a href="https://github.com/nholmber/google-maps-statistics/blob/master/map.py">GitHub</a>.</p>
+
+<ul>
+<li><p>The geographic statistical data was imported into a GeoPandas table by passing an URL to the <code>read_file</code> GeoPandas function. The URL represents a database call to the service discussed before, which returns data formatted as a JSON file. I filtered out all data columns that are irrelevant for this post using the <code>filter_columns</code> function defined below.
+
+  
+  
+  
+  
+
+
+<figure class="highlight python language-python">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-python"><code class="python">import geopandas as gpd
+
+def filter_columns(df, keep):
+  &#34;&#34;&#34;Filter Pandas table df keeping only columns in keep&#34;&#34;&#34;
+  cols = list(df)
+  for col in keep:
+    cols.remove(col)
+
+  return df.drop(columns=cols)
+
+def main():
+  # Get statistics from Statistics Finland portal for year 2018 keeping only the selected data columns
+  url = &#34;http://geo.stat.fi/geoserver/wfs?service=WFS&amp;version=1.0.0&amp;request=GetFeature&amp;typeName=postialue:pno_tilasto_2018&amp;outputFormat=json&#34;
+  keep_columns = [&#39;nimi&#39;, &#39;posti_alue&#39;, &#39;he_vakiy&#39;, &#39;geometry&#39;, &#39;pinta_ala&#39;, &#39;hr_mtu&#39;]
+  data = filter_columns(gpd.read_file(url), keep_columns)
+
+  # Rename columns
+  data.rename(columns={&#39;he_vakiy&#39;: &#39;pop2018&#39;, &#39;pinta_ala&#39;: &#39;area&#39;, &#39;nimi&#39;: &#39;name&#39;, &#39;hr_mtu&#39;: &#39;income&#39;, &#39;posti_alue&#39;: &#39;zip&#39;}, inplace=True)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p></li>
+
+<li><p>In the original data set, the coordinates that represent the boundaries of the postal code areas were defined in the Finnish projected coordinate system (<a href="https://epsg.io/3067"><code>epsg:3067</code></a>). Google Maps supports only Lat/Long coordinates (<a href="http://epsg.io/4326"><code>epsg:4326</code></a>), so I had to convert the coordinates to the correct coordinate system. As a reminder, the coordinates are stored in the MultiPolygon objects associated with each postal code area. The coordinate system was defined in the <code>init</code> variable in this data set (variable not shown above). The type conversion fortunately turned out to be a simple matter of calling the appropriate GeoPandas function
+
+  
+  
+  
+  
+
+
+<figure class="highlight python language-python">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-python"><code class="python"># Convert geometry to Google Maps compatible Lat/Long coordinates
+data.to_crs({&#39;init&#39;: &#39;epsg:4326&#39;}, inplace=True)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p></li>
+
+<li><p>The data set contained postal code areas with undefined median incomes (-1.0 or NaN). These postal code areas either had no inhabitants in 2018, or had too few inhabitants so that the income data was suppressed for privacy reasons. I simply set the relative median income in these areas to the national average to avoid visualization issues in Google Maps.
+
+  
+  
+  
+  
+
+
+<figure class="highlight python language-python">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-python"><code class="python"># Income data in some postal code areas might be undefined (NaNs or -1.0)
+# In these areas, there are either no inhabitants at all, or too few inhabitans
+# so the income data is not shown for privacy reasons
+# Set the income in these regions to the national average
+data.replace(-1.0, np.nan, inplace=True)
+avg_income = np.nanmean(data[&#39;income&#39;])
+data.fillna(avg_income, inplace=True)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p></li>
+
+<li><p>Once I had processed and saved the data to disk, it turned out that the size of the saved GeoJSON file was rather large (32 MB), which can be relatively slow to import into Google Maps. To reduce the file size slightly, I decided to round the median relative incomes and population densities to 2 decimal places. I was able to achieve a much larger file size reduction by rounding the coordinates of the postal code areas to four decimals from 15 decimal places. Reducing the coordinate precision did not appear to drastically decrease the quality of the postal code area boundaries, at least after a quick visual inspection in Google Maps. I used GeoPandas to round the former two quantities and the <a href="https://www.gdal.org/ogr2ogr.html"><code>ogr2ogr</code></a> command line tool to round the coordinates. GeoPandas (or rather the underlying library) does not natively support reducing the precision of Polygon coordinates, and emulating this behavior in Python was quite cumbersome compared to using the <code>ogr2ogr</code> tool. The final file size was 17 MB after rounding. I think it might be possible to further reduce the file size by removing redundant coordinates from the MultiPolygons with the GeoPandas <a href="http://geopandas.org/geometric_manipulations.html#GeoSeries.simplify">simplify</a> function, but I have not tested this option. Here are the commands I used to reduce the size of the GeoJSON file
+
+  
+  
+  
+  
+
+
+<figure class="highlight python language-python">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-python"><code class="python"># Round data to 2 decimal places to reduce size of resulting GeoJSON file
+data = data.round({&#39;pop_density&#39;: 2, &#39;income_relative&#39;: 2})</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+  
+  
+  
+  
+
+
+<figure class="highlight bash language-bash">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-bash"><code class="bash">ogr2ogr -f &#34;GeoJSON&#34; -lco COORDINATE_PRECISION=4 map_data_reduced.json map_data.json</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p></li>
+
+<li><p>I assigned discrete colors to the income and population density data with Matplotlib in order to visually distinguish how these quantities vary in different postal code areas in Google Maps. The colors were assigned by binning the data: the observed data range was first discretized into a set of $N$ bins, with each bin representing a range of values. The actual data was then assigned to these bins and an equally long color map vector was used to associate the bins with a color. I used the following code snippet to color the population density data.
+
+  
+  
+  
+  
+
+
+<figure class="highlight python language-python">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-python"><code class="python">def pop_density_binning(return_colors=False):
+  &#34;&#34;&#34;Return bins and color scheme for population density&#34;&#34;&#34;
+  # First bin is 0, next is 0.1-1, ..., final is &gt; 10000
+  bins = np.array([0, 1, 2, 4, 6, 8, 10, 50, 100, 200, 500, 1000, 1500, 2000, 2500, 5000, 10000])
+  cmap = plt.cm.get_cmap(&#39;Reds&#39;, len(bins)&#43;1)
+  if not return_colors:
+    return bins, cmap
+  else:
+    colors = []
+    for i in range(cmap.N):
+      rgb = cmap(i)[:3] # will return rgba, we take only first 3 so we get rgb
+      colors.append(matplotlib.colors.rgb2hex(rgb))
+
+    return bins, colors
+
+
+# Assign alternative colors for population density
+bins, cmap = pop_density_binning()
+colors = []
+
+for i, row in data.iterrows():
+  index = bins.searchsorted(row[&#39;pop_density&#39;])
+  colors.append(matplotlib.colors.rgb2hex(cmap(index)[:3]))
+
+data[&#39;fill_density&#39;] = Series(colors, dtype=&#39;str&#39;, index=data.index)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p></li>
+
+<li><p>In order to import the processed data into Google Maps, the data should be saved as a GeoJSON file. Turns out that outputting data into a pre-existing file is not possible in GeoPandas, even if your intention is to overwrite the original file. Such attempts will crash the file writing driver with a rather cryptic error message. I explicitly deleted the output file in case it already existed to avoid this crash.
+
+  
+  
+  
+  
+
+
+<figure class="highlight python language-python">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-python"><code class="python"># Save data as GeoJSON
+# Note the driver cannot overwrite an existing file,
+# so we must remove it first
+import os
+
+outfile = &#39;map_data.json&#39;
+if os.path.isfile(outfile):
+  os.remove(outfile)
+
+data.to_file(outfile, driver=&#39;GeoJSON&#39;)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p></li>
+</ul>
+
+<h1 id="creating-a-custom-google-maps-based-map">Creating a custom Google Maps based map</h1>
+
+<p>To recap, we have saved everything we want to include in our custom Google Maps based map in a GeoJSON file. We are now ready to go through the process of importing and visualizing this data using the Google Maps JS API. I will be adding the following elements on top of the standard Google Maps canvas:</p>
+
+<ol>
+<li>Restyled base map with reduced clutter (labels, markers, etc.)</li>
+<li>Data layer object created by importing data from the GeoJSON file. This file defines the postal code areas as Polygon objects, contains the population and income data, as well as the instructions for colorizing these areas based on the values of the aforementioned properties</li>
+<li>A clickable button that allows switching between the visualizations for the two data sets</li>
+<li>A clickable info window that displays additional information about the selected postal code area</li>
+<li>A legend which visually depicts how the values of the two properties vary in different parts of Finland</li>
+</ol>
+
+<p>I&rsquo;ll go through each step individually. Feel free to skip a head to the full code available <a href="https://github.com/nholmber/google-maps-statistics/blob/master/map.js">here</a> if you are already familiar with the Google Maps JS API.</p>
+
+<h2 id="1-restyling-google-maps">1. Restyling Google Maps</h2>
+
+<p>The default view of Google Maps can be edited exhaustively with styling rules. A convenient interactive tool is provided <a href="https://mapstyle.withgoogle.com/">online</a>. I used this tool to create 2 different map styles for the median income and population density data. The styling rules are passed to the Google Maps constructor as a JSON object (variable named <code>style</code> below) and can be altered later on via the <a href="https://developers.google.com/maps/documentation/javascript/reference/3/map#Map.setOptions"><code>setOptions</code></a> function. Various default visualization controls can be disabled with the same interface, see <a href="https://developers.google.com/maps/documentation/javascript/reference/3/map#MapOptions">here</a> for a complete list. This is the initializer I used
+
+  
+  
+  
+  
+
+
+<figure class="highlight javascript language-javascript">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-javascript"><code class="javascript">// Initialize map
+var map = new google.maps.Map(document.getElementById(&#39;map&#39;), {
+  zoom: 10,
+  mapTypeControl: false,
+  streetViewControl: false,
+  styles: style
+});</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<h2 id="2-creating-a-data-layer-object-and-accessing-its-properties">2. Creating a Data Layer object and accessing its properties</h2>
+
+<p>This step is, without a doubt, the easiest step in the map creation process. Assuming that the GeoJSON file was uploaded somewhere in the public domain, say GitHub, the Data Layer object can be created by simply passing the URL of the hosted file to the <code>loadGeoJson</code> function. Getter and setter functions are available for accessing and manipulating the properties of the Data Layer object. Here is the code snippet I used for importing the data and setting the style of each postal code area Polygon object. By default (when <code>useDensity = false</code>), the postal code areas are colored based on the relative median income, while the actual color is stored in the variable <code>fill</code>. You might also notice that I am switching between different canvas visualization styles whenever the postal code areas are recolored.</p>
+
+
+  
+  
+  
+  
+
+
+<figure class="highlight javascript language-javascript">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-javascript"><code class="javascript">// Load GeoJSON that contains zip code boundaries and geographic information
+// NOTE: This uses cross-domain XHR, and may not work on older browsers.
+map.data.loadGeoJson(&#39;https://raw.githubusercontent.com/nholmber/google-maps-statistics/master/map_data_reduced.json&#39;)
+
+// Colorize zip code areas based on relative median income
+// or population density (changeable via dedicated button)
+map.data.setStyle(function(feature) {
+  if (!feature.getProperty(&#39;useDensity&#39;)) {
+    var color = feature.getProperty(&#39;fill&#39;);
+    var opacity = 0.7;
+    map.setOptions({styles : style});
+  } else {
+    var color = feature.getProperty(&#39;fill_density&#39;);
+    var opacity = 0.9;
+    map.setOptions({styles : altStyle});
+  }
+  return {
+    fillColor: color,
+    fillOpacity: opacity,
+    strokeWeight: 1,
+    strokeColor: color
+  }
+});</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2 id="2-button-for-switching-between-visualizations">2. Button for switching between visualizations</h2>
+
+<p>We have have imported two data sets into Google Maps, which both have their own distinct visualization styles. We need to create a button to switch between the data sets. Clicking this button should trigger a recoloring of the postal code areas and update the map legend (see below) so that it displays the correct information. To achieve this functionality in practice, I added a DOM listener to the button (<code>google.maps.event.addDomListener</code>), which detects when the button is clicked and triggers (<code>google.maps.event.trigger</code>) two custom map events that update the Polygon colors and the map legend. This step is best explained by the actual code. Notice that we iterate over the features of <code>map.data</code> (the postal code areas) and update the property <code>useDensity</code> which, as the previous section showed, controls the styling of the Polygon objects.</p>
+
+
+  
+  
+  
+  
+
+
+<figure class="highlight javascript language-javascript">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-javascript"><code class="javascript">// Create button for switching between visualizations
+function switchVisualization(switchControlDiv, map){
+  // Set CSS for the control border.
+  var controlUI = document.createElement(&#39;div&#39;);
+  controlUI.style.backgroundColor = &#39;#fff&#39;;
+  controlUI.style.border = &#39;2px solid #fff&#39;;
+  controlUI.style.borderRadius = &#39;3px&#39;;
+  controlUI.style.boxShadow = &#39;0 2px 6px rgba(0,0,0,.3)&#39;;
+  controlUI.style.cursor = &#39;pointer&#39;;
+  controlUI.style.marginBottom = &#39;22px&#39;;
+  controlUI.style.textAlign = &#39;center&#39;;
+  controlUI.title = &#39;Click to switch between visualization styles&#39;;
+  switchControlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior.
+  var controlText = document.createElement(&#39;div&#39;);
+  controlText.style.color = &#39;rgb(25,25,25)&#39;;
+  controlText.style.fontFamily = &#39;Roboto,Arial,sans-serif&#39;;
+  controlText.style.fontSize = &#39;16px&#39;;
+  controlText.style.lineHeight = &#39;38px&#39;;
+  controlText.style.paddingLeft = &#39;5px&#39;;
+  controlText.style.paddingRight = &#39;5px&#39;;
+  controlText.innerHTML = &#39;Change visualization&#39;;
+  controlUI.appendChild(controlText);
+
+  // Setup the click event listener. Button click switches
+  // between two visualization schemes, which represent
+  // different demographic data
+  google.maps.event.addDomListener(controlUI, &#39;click&#39;, function() {
+    // Trigger events that update Polygon colors and legend
+    google.maps.event.trigger(map.data, &#39;setcolor&#39;)
+    google.maps.event.trigger(map.data, &#39;updatelegend&#39;)
+  });
+}
+
+// Note this section of code is inside the initMap code block
+
+  // Create DIV for the button that switches between the two
+  // data sets used to colorize the zip code areas.
+  var switchControlDiv = document.createElement(&#39;div&#39;);
+  var switchControl = new switchVisualization(switchControlDiv, map);
+
+  switchControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(switchControlDiv);
+
+  // Add listener that detects when button is clicked
+  // triggering a recoloring of the Polygons objects
+  map.data.addListener(&#39;setcolor&#39;, function(event) {
+    map.data.forEach(function(feature) {
+      feature.setProperty(&#39;useDensity&#39;, !feature.getProperty(&#39;useDensity&#39;));
+    });
+  })
+
+  // Add listener that detects when button is clicked
+  // triggering a redraw of the map legend
+  map.data.addListener(&#39;updatelegend&#39;, function(event) {
+    var useDensity;
+    var accessed = false;
+    // Determine which color scheme to use
+    map.data.forEach(function(feature) {
+      if (!accessed) {
+        useDensity = !feature.getProperty(&#39;useDensity&#39;);
+        accessed = true;
+      }
+    });
+    // Clear old legend
+    while (legend.hasChildNodes()) {
+      legend.removeChild(legend.firstChild);
+    }
+    // Recreate legend with new color scheme
+    createLegend(legend, useDensity);
+  });</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2 id="3-info-window">3. Info window</h2>
+
+<p>The Data Layer objects can contain significantly more information than can be visualized by simply coloring the corresponding Polygon objects. We can display additional information as a pop up info which can virtually contain anything. Here, we will simply display the numeric values of the variables we saved into the GeoJSON file. The info window is placed on top of an invisible marker that is positioned at the center of the selected postal code area. The Polygon object does not have a native <code>getCenter</code> function for computing the center point of the Polygon. The object must therefore first be converted to a <code>LatLngBounds</code> object which has the desired capability.</p>
+
+
+  
+  
+  
+  
+
+
+<figure class="highlight javascript language-javascript">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-javascript"><code class="javascript">// Code is again inside initMap
+
+  // When the user hovers, tempt them to click by outlining zip code area.
+  // Call revertStyle() to remove all overrides. This will use the style rules
+  // defined in the function passed to setStyle()
+  map.data.addListener(&#39;mouseover&#39;, function(event) {
+    map.data.revertStyle();
+    map.data.overrideStyle(event.feature, {strokeWeight: 4, strokeColor: &#39;gray&#39;});
+  });
+
+  map.data.addListener(&#39;mouseout&#39;, function(event) {
+    map.data.revertStyle();
+  });
+
+  // When the user selects a zip code area,
+  // display info window with more detailed information
+  var infowindow = new google.maps.InfoWindow();
+  map.data.addListener(&#39;click&#39;, function(event) {
+      createInfoWindow(map, event, infowindow);
+  });
+
+  function createInfoWindow(map, event){
+    // Get properties from Data Layer to populate info window
+    var name = event.feature.getProperty(&#39;name&#39;);
+    var zip = event.feature.getProperty(&#39;zip&#39;);
+    var income = event.feature.getProperty(&#39;income&#39;);
+    var incomeRelative = event.feature.getProperty(&#39;income_relative&#39;);
+    var population = event.feature.getProperty(&#39;pop2018&#39;);
+    var populationDensity = event.feature.getProperty(&#39;pop_density&#39;);
+
+    // Create content for info window
+    var contentString = &#39;&lt;div id=&#34;content&#34;&gt;&lt;div id=&#34;siteNotice&#34;&gt;&lt;/div&gt;&#39;&#43;
+      &#39;&lt;h2 id=&#34;firstHeading&#34; class=&#34;firstHeading&#34;&gt;&#39; &#43; name &#43; &#39;&lt;/h2&gt;&#39;&#43;
+      &#39;&lt;h3&gt;Zip code: &#39; &#43; zip &#43; &#39;&lt;/h3&gt;&#39;&#43;
+      &#39;&lt;div id=&#34;bodyContent&#34; style=&#34;font-size: 12pt;&#34; &gt;&#39;&#43;
+      &#39;&lt;/br&gt;Population (2018): &#39;&#43; population &#43;
+      &#39;&lt;/br&gt;Median income (2015): &#39;&#43; income.toFixed(2) &#43; &#39; €&#39; &#43;
+      &#39;&lt;/br&gt;Median income relative to national average (2015): &#39;&#43; incomeRelative.toFixed(2) &#43; &#39; €&#39; &#43;
+      &#39;&lt;/br&gt;Population density (persons / km&lt;sup&gt;2&lt;/sup&gt;): &#39;&#43; populationDensity.toFixed(2) &#43;&#39;&lt;/p&gt;&#39;&#43;
+      &#39;&lt;/div&gt;&#39;&#43;
+      &#39;&lt;/div&gt;&#39;;
+
+    // Center info window on selected zip code area
+    // Find center of zip code area by converting
+    // the corresponding Polygon object to a
+    // LatLngBounds object which has the getCenter function
+    var bounds = new google.maps.LatLngBounds();
+    var geometry = event.feature.getGeometry();
+
+    geometry.forEachLatLng(function(point){
+      bounds.extend({
+        lat : point.lat(),
+        lng : point.lng()
+      });
+    });
+    var center = bounds.getCenter();
+
+    // Create invisible marker for info window
+    var marker = new google.maps.Marker({
+      position: center,
+      map: map,
+      visible : false
+    });
+    // Create info window
+    infowindow.setContent(contentString);
+    infowindow.open(map, marker);
+  }</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2 id="4-legend">4. Legend</h2>
+
+<p>All right, nearly there. The final object we will add to the map is a color legend with two different color schemes and label sets. The colors and labels were defined by the Python script which we used to bin the corresponding statistical data. Instead of recreating these variables in JS, I decided to pass the values from Python to the HTML file that contains the JS code. The data is accessed in JS via named HTML div objects. With the label and color definitions available for use, it is a straightforward matter to draw and update the legend when necessary.</p>
+
+
+  
+  
+  
+  
+
+
+<figure class="highlight javascript language-javascript">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-javascript"><code class="javascript">// Code is again inside initMap
+
+  // Create a color bar legend for the colored zip code areas.
+  // By default, shows colors used for describing relative median income.
+  // Button click toggles changes data to population density.
+  var legend = document.getElementById(&#39;legend&#39;);
+  createLegend(legend, true)
+
+  function createLegend(legend, useDensity){
+    // Legend for population density
+    if (useDensity) {
+      var div = document.createElement(&#39;center&#39;);
+      div.innerHTML = &#39;&lt;h3&gt;Relative&lt;br/&gt;Median&lt;br/&gt;Income&lt;br/&gt;(€)&lt;/center&gt;&lt;/h3&gt;&#39;
+      legend.appendChild(div);
+      for (var key in colors) {
+        var color = colors[key];
+        var label = labels[key];
+        var div = document.createElement(&#39;div&#39;);
+        div.innerHTML = &#39;&lt;div class=&#34;cbox&#34; style=&#34;background-color: &#39;&#43; color &#43; &#39;; padding: 5px; box-sizing: border-box; opacity: 0.8;&#34;&gt;&lt;center&gt;&#39;&#43;label&#43;&#39;&lt;/center&gt;&#39;;
+        legend.appendChild(div);
+      };
+    // Legend for relative median income
+    } else {
+      var div = document.createElement(&#39;center&#39;);
+      div.innerHTML = &#39;&lt;h3&gt;Population&lt;br/&gt;density&lt;br/&gt;(persons / km&lt;sup&gt;2&lt;/sup&gt;)&lt;/center&gt;&lt;/h3&gt;&#39;
+      legend.appendChild(div);
+      for (var key in bcolors) {
+        var color = bcolors[key];
+        var label = blabels[key];
+        var div = document.createElement(&#39;div&#39;);
+        div.innerHTML = &#39;&lt;div class=&#34;cbox&#34; style=&#34;background-color: &#39;&#43; color &#43; &#39;; padding: 5px; box-sizing: border-box; opacity: 0.8;&#34;&gt;&lt;center&gt;&#39;&#43;label&#43;&#39;&lt;/center&gt;&#39;;
+        legend.appendChild(div);
+      };
+    };
+  }
+  map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(legend);</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h1 id="final-ingredient-embedding-js-in-a-html-file">Final ingredient: Embedding JS in a HTML file</h1>
+
+<p>We have defined all the JavaScript elements that we wanted to include in our Google Maps based geographic data visualizer. The final step of creating a fully fledged Google Maps web page is to embed the JS code in a HTML file and to load the Google Maps JS API. I used a basic HTML template from the API documentation for this task, which you can find below. Note that I&rsquo;ve left the Google Maps API key blank (<code>YOUR_API_KEY_HERE</code>). Opening this HTML file in a browser won&rsquo;t, therefore, create a working map, unless you fill in your own API key to active the JS API. As you might have noticed, the API key is passed to the Google Maps API initializer via a parameter in the URL string.</p>
+
+<p>When I actually want to load up the map in a browser, I have used this simple <a href="https://github.com/nholmber/google-maps-statistics/blob/master/map.py">Python script</a> to set the API key and output a new HTML file. The script also defines the colors and labels used in creating the map legend, a matter we discussed in detail in the previous section. If you define your API key in this <a href="https://github.com/nholmber/google-maps-statistics/blob/master/key.py">file</a>, you can use the same Python script to recreate the map showcased at the start of this post.</p>
+
+
+  
+  
+  
+  
+
+
+<figure class="highlight html language-html">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-html"><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Visualizing Demographic Data with Google Maps&lt;/title&gt;
+    &lt;meta name=&#34;viewport&#34; content=&#34;initial-scale=1.0&#34;&gt;
+    &lt;meta charset=&#34;utf-8&#34;&gt;
+    &lt;style&gt;
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      #legend {
+        font-family: Arial, sans-serif;
+        background: #fff;
+        padding: 10px;
+        margin: 10px;
+        border: 3px solid #000;
+        border-collapse: collapse;
+      }
+      #legend h3 {
+        margin-top: 0;
+      }
+      .cbox {
+        font-size: 150%;
+        font-weight: bold;
+        color: #ffe680;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&#34;map&#34; &gt;&lt;/div&gt;
+    &lt;div id=&#34;legend&#34;&gt;&lt;/div&gt;
+    &lt;div id=&#34;color-definitions&#34; style=&#34;display: none;&#34;&gt;COLOR_DEFINITIONS&lt;/div&gt;
+    &lt;div id=&#34;labels&#34; style=&#34;display: none;&#34;&gt;LABEL_DEFINITIONS&lt;/div&gt;
+    &lt;div id=&#34;color-definitions-alternate&#34; style=&#34;display: none;&#34;&gt;COLOR_ALTERNATE_DEFINITIONS&lt;/div&gt;
+    &lt;div id=&#34;labels-alternate&#34; style=&#34;display: none;&#34;&gt;LABEL_ALTERNATE_DEFINITIONS&lt;/div&gt;
+    &lt;script src=&#34;map.js&#34;&gt;&lt;/script&gt;
+    &lt;script async defer
+    src=&#34;https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&amp;callback=initMap&#34;&gt;
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/machine-learning/">machine learning</a>
+
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/javascript/">javascript</a>
+
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/python/">python</a>
+
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/html/">HTML</a>
+
+  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/google-maps/">Google Maps</a>
+
+                  </div>
+                
+              
+            
+            
+  <div class="post-actions-wrap">
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nholmber.github.io/2018/05/mpi-diagonalization/" data-tooltip="Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nholmber.github.io/2018/08/gmaps-statistics/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nholmber.github.io/2018/08/gmaps-statistics/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nholmber.github.io/2018/08/gmaps-statistics/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2018 Nico Holmberg. Powered by <a href="https://gohugo.io">Hugo</a> and the <a href="https://themes.gohugo.io/hugo-tranquilpeak-theme">Tranquilpeak</a> theme. All Rights Reserved
+  </span>
+
+  <script type="text/javascript" async
+		src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML">
+		MathJax.Hub.Config({
+		tex2jax: {
+		inlineMath: [['$','$'], ['\\(','\\)']],
+		displayMath: [['$$','$$']],
+		processEscapes: true,
+		processEnvironments: true,
+		skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+		TeX: { equationNumbers: { autoNumber: "AMS" },
+		     extensions: ["AMSmath.js", "AMSsymbols.js"] }
+		}
+		});
+		MathJax.Hub.Queue(function() {
+		
+		
+		
+		var all = MathJax.Hub.getAllJax(), i;
+		for(i = 0; i < all.length; i += 1) {
+		    all[i].SourceElement().parentNode.className += ' has-jax';
+		}
+		});
+		MathJax.Hub.Config({
+		
+		TeX: { equationNumbers: { autoNumber: "AMS" } }
+		});
+	</script>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        
+  <div class="post-actions-wrap">
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nholmber.github.io/2018/05/mpi-diagonalization/" data-tooltip="Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nholmber.github.io/2018/08/gmaps-statistics/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nholmber.github.io/2018/08/gmaps-statistics/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nholmber.github.io/2018/08/gmaps-statistics/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnholmber.github.io%2F2018%2F08%2Fgmaps-statistics%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fnholmber.github.io%2F2018%2F08%2Fgmaps-statistics%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fnholmber.github.io%2F2018%2F08%2Fgmaps-statistics%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/nholmber/image/upload/v1487075021/profile-pic-600x600_fuaafu.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Nico Holmberg</h4>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Doctoral Student, Computational Chemistry
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Espoo, Finland
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2018/08/gmaps-statistics/">
+                <h3 class="media-heading">Visualizing Geographic Statistical Data with Google Maps</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>This tutorial will teach you how to create a custom Google Maps based map for visualizing geographic statistical data. Such maps can be a useful tool when developing machine learning models. As a specific example case, we will create a map for visualizing the population density and median household income of postal code areas in Finland.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2018/05/mpi-diagonalization/">
+                <h3 class="media-heading">Matrix diagonalization in parallel computing: Benchmarking ELPA against ScaLAPACK</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Matrix diagonalization is a fundamental linear algebra operation with a wide range of applications in scientific and other fields of computing. At the same time, it is also one of the most expensive operations with a formal <a href="https://en.wikipedia.org/wiki/Computational_complexity_of_mathematical_operations">computational complexity</a> of $\mathcal{O}(N^3)$, which can become a significant performance bottleneck as the size of the system grows. In this post, I will introduce the canonical algorithm for diagonalizing matrices in parallel computing to set the scene for today&rsquo;s main topic: improving diagonalization performance. With the help of benchmark calculations, I will then demonstrate how a clever mathematical library choice can easily reduce the time needed to diagonalize a matrix by at least 50 %.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2018/01/cp2k-uk-2018-recap/">
+                <h3 class="media-heading">A recap of the CP2K-UK 2018 meeting</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jan 1, 2018
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>The 2018 edition of the <a href="https://www.cp2k.org/events:2018_user_meeting:index">CP2K UK user meeting</a> was held two Fridays ago at the University of Lincoln, UK. I will be recaping my experiences of the event in this post.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/12/cp2k-uk-2018/">
+                <h3 class="media-heading">Constrained DFT tutorial at the CP2K-UK 2018 meeting</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Dec 12, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>I will be giving an introductory how-to talk on constrained DFT at the <a href="https://tinyurl.com/CP2K-2018">2018 CP2K UK User meeting</a> at the University of Lincoln, UK, on Friday January 12 2018.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/">
+                <h3 class="media-heading">Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Dec 12, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>In my previous <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">post</a>, I discussed the benefits of using the message passing interface (MPI) to parse large data files in parallel over multiple processors. In today&rsquo;s post, I will demonstrate how MPI I/O operations can be further accelerated by introducing the concept of hints. The second topic I will discuss is the emergence of solid-state drives in high-performance computing systems to resolve I/O bottlenecks. These topics will be illustrated by benchmark calculations using a parallel writer routine that I will implement to the <a href="https://nholmber.github.io/2017/05/mpi-io-cube/">task described previously</a>.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/05/mpi-io-cube/">
+                <h3 class="media-heading">Parallelizing I/O operations with MPI: A case study with volumetric data</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Lately, parsing volumetric data from large (&gt; 300 MB) text files has been a computational bottleneck in my simulations. Because I expect to be processing hundreds of these files, I decided to parallelize the parser routine by leveraging the <a href="https://en.wikipedia.org/wiki/Message_Passing_Interface">message passing interface</a> (MPI). I will describe my first experience with MPI I/O in this post by going through the synthesis process of the parallelized parser routine. I will also examine the performance of the parallel parser.</p>
+
+<p></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/04/cp2k-build-cray-xc40/">
+                <h3 class="media-heading">Building CP2K on a Cray XC40</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Compiling a <a href="https://www.cp2k.org/">CP2K</a> binary &ndash; the massively parallel, open-source quantum chemistry and solid state physics program written in Fortran 2003 &ndash; can be a daunting task if you&rsquo;ve never built a large project using <a href="https://en.wikipedia.org/wiki/Make_(software)">maketools</a>. This post aims to demystify the build process by showcasing a full CP2K build on a Cray XC40 supercomputer (codename <a href="https://research.csc.fi/sisu-supercomputer"><em>Sisu</em></a>) including dependencies.
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://nholmber.github.io/2017/02/welcome/">
+                <h3 class="media-heading">Welcome to my website!</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Feb 2, 2017
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>Greetings and welcome! You have stumbled upon the personal website and blog of Nico Holmberg, a 26 year old Finn pursuing a doctoral degree in Computational Quantum Chemistry. Feel free to check out my <a href="../../../profile">profile</a> for more information about me, my professional projects and other interests!
+</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         8 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/nholmber/image/upload/v1487095700/sidebar_nefvej.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://nholmber.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/nholmber.github.io\/2018\/08\/gmaps-statistics\/';
+          
+            this.page.identifier = '\/2018\/08\/gmaps-statistics\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'nholmber';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+    
+  </body>
+</html>
+

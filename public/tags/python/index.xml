@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on Nico Holmberg</title>
+    <link>https://nholmber.github.io/tags/python/</link>
+    <description>Recent content in Python on Nico Holmberg</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 09 Aug 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://nholmber.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Visualizing Geographic Statistical Data with Google Maps</title>
+      <link>https://nholmber.github.io/2018/08/gmaps-statistics/</link>
+      <pubDate>Thu, 09 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/2018/08/gmaps-statistics/</guid>
+      <description>&lt;p&gt;This tutorial will teach you how to create a custom Google Maps based map for visualizing geographic statistical data. Such maps can be a useful tool when developing machine learning models. As a specific example case, we will create a map for visualizing the population density and median household income of postal code areas in Finland.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

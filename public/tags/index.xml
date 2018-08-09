@@ -48,6 +48,15 @@
     </item>
     
     <item>
+      <title>Google Maps</title>
+      <link>https://nholmber.github.io/tags/google-maps/</link>
+      <pubDate>Thu, 09 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/tags/google-maps/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>High Performance Computing</title>
       <link>https://nholmber.github.io/tags/high-performance-computing/</link>
       <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
@@ -66,11 +75,29 @@
     </item>
     
     <item>
+      <title>Html</title>
+      <link>https://nholmber.github.io/tags/html/</link>
+      <pubDate>Thu, 09 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/tags/html/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Hugo</title>
       <link>https://nholmber.github.io/tags/hugo/</link>
       <pubDate>Wed, 22 Feb 2017 00:00:00 +0000</pubDate>
       
       <guid>https://nholmber.github.io/tags/hugo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Javascript</title>
+      <link>https://nholmber.github.io/tags/javascript/</link>
+      <pubDate>Thu, 09 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/tags/javascript/</guid>
       <description></description>
     </item>
     
@@ -84,11 +111,29 @@
     </item>
     
     <item>
+      <title>Machine Learning</title>
+      <link>https://nholmber.github.io/tags/machine-learning/</link>
+      <pubDate>Thu, 09 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/tags/machine-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Mpi</title>
       <link>https://nholmber.github.io/tags/mpi/</link>
       <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
       
       <guid>https://nholmber.github.io/tags/mpi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>https://nholmber.github.io/tags/python/</link>
+      <pubDate>Thu, 09 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/tags/python/</guid>
       <description></description>
     </item>
     
