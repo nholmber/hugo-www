@@ -19,11 +19,11 @@ canonifyurls = true
 
 [author]
   name = "Nico Holmberg"
-  #bio = ""
+  bio = "Soon-to-be PhD in Computational Chemistry Eager to Develop Machine Learning Skills, Tech Enthusiast"
   job = "Doctoral Student, Computational Chemistry"
   location = "Espoo, Finland"
   picture = "https://res.cloudinary.com/nholmber/image/upload/v1533803085/img-600x600_buh1cy.png"
-  # twitter = ""
+  twitter = "nholmber_"
   # googlePlus = ""
 
 # Menu Configuration
@@ -58,12 +58,12 @@ canonifyurls = true
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-user\"></i>"
   url = "/profile"
 
-#[[menu.links]]
-#  weight = 0
-#  identifier = "github"
-#  name = "GitHub"
-#  pre = "<i class=\"sidebar-button-icon fa fa-lg fa-github\"></i>"
-#  url = "https://github.com/kakawait"
+[[menu.links]]
+  weight = 0
+  identifier = "github"
+  name = "GitHub"
+  pre = "<i class=\"sidebar-button-icon fa fa-lg fa-github\"></i>"
+  url = "https://github.com/nholmber"
 #[[menu.links]]
 #  weight = 1
 #  identifier = "stackoverflow"
