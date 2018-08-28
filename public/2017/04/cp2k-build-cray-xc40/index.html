@@ -227,6 +227,10 @@ ga('send', 'pageview');
 
 <p>The CP2K installation process can be divided into four parts: <a href="#build-dependency">compiling dependencies</a>, <a href="#build-binary">compiling the binary</a>, checking that it works (= <a href="#test-binary">regression testing</a>), and benchmarking the performance of the binary. Several versions of the CP2K binary can be built using different parallelization strategies and combinations of optimization and debugging flags. In this post, I will focus on the first three steps of the installation process. I will devote a separate post for exploring the effects of different optimization flags/options, although I will build (some of the) binary variants in this post.</p>
 
+<blockquote>
+<p>This post was <a href="#libxsmm">last edited</a> on August 28, 2018 after its original publish date on April 26, 2017.</p>
+</blockquote>
+
 <h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
 <ul>
 <li><a href="#build-dependency">Building the dependencies</a>
@@ -633,6 +637,10 @@ make CXX=CC CC=cc FC=gfortran AVX=2 OPT=3 PREFIX=${pkg_install_dir} install</cod
     </tbody>
   </table>
 </figure>
+
+<blockquote>
+<p><strong>Edit on August 28, 2018:</strong> Thanks to the help of <a href="https://github.com/hfp">@hfp</a>, one of the developers behind libxsmm, I managed to track down the cause behind the compilation crash on Sisu. Turns out that the <a href="https://www.gnu.org/software/binutils/">binutils</a> were outdated (2.23.1) on Sisu, while a newer 2.25 version was available on Taito. This issue can be bypassed by compiling the library with the extra flag <code>INTRINSICS=1</code>, see also instructions <a href="https://github.com/hfp/libxsmm/wiki/Compatibility#cray">here</a>.</p>
+</blockquote>
 
 <h1 id="build-binary">Building the CP2K binary</h1>
 
