@@ -18,6 +18,8 @@ Compiling a [CP2K](https://www.cp2k.org/) binary -- the massively parallel, open
 
 The CP2K installation process can be divided into four parts: [compiling dependencies]({{< ref "#build-dependency" >}}), [compiling the binary]({{< ref "#build-binary" >}}), checking that it works (= [regression testing]({{< ref "#test-binary" >}})), and benchmarking the performance of the binary. Several versions of the CP2K binary can be built using different parallelization strategies and combinations of optimization and debugging flags. In this post, I will focus on the first three steps of the installation process. I will devote a separate post for exploring the effects of different optimization flags/options, although I will build (some of the) binary variants in this post.
 
+> This post was [last edited]({{< ref "#libxsmm" >}}) on August 28, 2018 after its original publish date on April 26, 2017.
+
 <!-- toc -->
 
 # Building the dependencies {#build-dependency}
@@ -231,7 +233,7 @@ nholmber@sisu-login4 ~/a/b/e/obj_no_thread >>> ./elpa2_print_kernels
 {{< /codeblock >}}
 
 
-### libxsmm
+### libxsmm {#libxsmm}
 
 [Libxsmm](https://github.com/hfp/libxsmm) is a specialized matrix multiplication library for small matrices targeting Intel architecture. It substitutes CP2K's own (optional) libsmm library (`${cp2k_basedir}/tools/build_libsmm`). Small matrix multiplications are a common operation in CP2K because Gaussian basis functions are used, see *e.g.* the DBCSR timing report at the end of a CP2K output file. The library features [just-in-time](https://en.wikipedia.org/wiki/Just-in-time_compilation) code generation and overall the installation process is very simple. As a slight caveat, I actually had to compile version `1.7.1` of the library on [*Taito*](https://research.csc.fi/taito-user-guide) -- a computer cluster which has similar Haswell nodes like its supercomputer sibling -- due to issues with the gcc compiler on *Sisu* (which nonetheless works with version `1.5.1`). Thanks to the CSC service desk for discovering the workaround!
 
@@ -243,6 +245,8 @@ cd libxsmm-1.7.1
 make -j 4 CXX=CC CC=cc FC=gfortran AVX=2 OPT=3 PREFIX=${pkg_install_dir} > make.log 2>&
 make CXX=CC CC=cc FC=gfortran AVX=2 OPT=3 PREFIX=${pkg_install_dir} install
 {{< /codeblock >}}
+
+>**Edit on August 28, 2018:** Thanks to the help of [@hfp](https://github.com/hfp), one of the developers behind libxsmm, I managed to track down the cause behind the compilation crash on Sisu. Turns out that the [binutils](https://www.gnu.org/software/binutils/) were outdated (2.23.1) on Sisu, while a newer 2.25 version was available on Taito. This issue can be bypassed by compiling the library with the extra flag `INTRINSICS=1`, see also instructions [here](https://github.com/hfp/libxsmm/wiki/Compatibility#cray).
 
 
 # Building the CP2K binary  {#build-binary}
