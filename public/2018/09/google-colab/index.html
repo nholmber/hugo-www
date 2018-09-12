@@ -20,29 +20,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Hugo 0.26 with theme Tranquilpeak 0.4.3-BETA">
-    <title>Constrained DFT tutorial at the CP2K-UK 2018 meeting</title>
+    <title>Integrating Google Colaboratory into Your Machine Learning Workflow</title>
     <meta name="author" content="Nico Holmberg">
-    <meta name="keywords" content="CP2K, tutorial, how-to">
+    <meta name="keywords" content="machine learning, data science, cloud computing, Jupyter, python, Google Colaboratory">
 
     <link rel="icon" href="https://nholmber.github.io/favicon.ico">
     
 
     
-    <meta name="description" content="I will be giving an introductory how-to talk on constrained DFT at the 2018 CP2K UK User meeting at the University of Lincoln, UK, on Friday January 12 2018.
-
-">
-    <meta property="og:description" content="I will be giving an introductory how-to talk on constrained DFT at the 2018 CP2K UK User meeting at the University of Lincoln, UK, on Friday January 12 2018.
-
-">
+    <meta name="description" content="Are you using Jupyter notebooks regularly in your machine learning or data science projects? Did you know that you can work on notebooks inside a free cloud-based environment with a GPU accelerator? In this post, I will introduce you to Google Colaboratory and show you in a few simple steps how to integrate this platform into your daily workflow.">
+    <meta property="og:description" content="Are you using Jupyter notebooks regularly in your machine learning or data science projects? Did you know that you can work on notebooks inside a free cloud-based environment with a GPU accelerator? In this post, I will introduce you to Google Colaboratory and show you in a few simple steps how to integrate this platform into your daily workflow.">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="Constrained DFT tutorial at the CP2K-UK 2018 meeting">
-    <meta property="og:url" content="/2017/12/cp2k-uk-2018/">
+    <meta property="og:title" content="Integrating Google Colaboratory into Your Machine Learning Workflow">
+    <meta property="og:url" content="/2018/09/google-colab/">
     <meta property="og:site_name" content="Nico Holmberg">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Nico Holmberg">
-    <meta name="twitter:description" content="I will be giving an introductory how-to talk on constrained DFT at the 2018 CP2K UK User meeting at the University of Lincoln, UK, on Friday January 12 2018.
-
-">
+    <meta name="twitter:description" content="Are you using Jupyter notebooks regularly in your machine learning or data science projects? Did you know that you can work on notebooks inside a free cloud-based environment with a GPU accelerator? In this post, I will introduce you to Google Colaboratory and show you in a few simple steps how to integrate this platform into your daily workflow.">
     
       <meta name="twitter:creator" content="@nholmber_">
     
@@ -56,7 +50,7 @@
     
 
     
-      <meta property="og:image" content="https://res.cloudinary.com/nholmber/image/upload/v1513941330/cp2k_cdft_logo_400_cropped_ckrvxk.png">
+      <meta property="og:image" content="https://res.cloudinary.com/nholmber/image/upload/v1536752786/colab_icon_hphjpb.png">
     
     
     
@@ -212,15 +206,15 @@ ga('send', 'pageview');
             <div class="post-header main-content-wrap text-center">
   
     <h1 class="post-title" itemprop="headline">
-      Constrained DFT tutorial at the CP2K-UK 2018 meeting
+      Integrating Google Colaboratory into Your Machine Learning Workflow
     </h1>
   
   
   <div class="postShorten-meta post-meta">
     
-      <time itemprop="datePublished" datetime="2017-12-22T00:00:00Z">
+      <time itemprop="datePublished" datetime="2018-09-12T00:00:00Z">
         
-  December 22, 2017
+  September 12, 2018
 
       </time>
     
@@ -229,7 +223,7 @@ ga('send', 'pageview');
   
     <span>in</span>
     
-      <a class="category-link" href="https://nholmber.github.io/categories/conferences">conferences</a>
+      <a class="category-link" href="https://nholmber.github.io/categories/machine-learning">machine learning</a>
     
   
 
@@ -239,34 +233,335 @@ ga('send', 'pageview');
           
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
-              <p>I will be giving an introductory how-to talk on constrained DFT at the <a href="https://tinyurl.com/CP2K-2018">2018 CP2K UK User meeting</a> at the University of Lincoln, UK, on Friday January 12 2018.</p>
+              <p>Are you using <a href="https://jupyter.org">Jupyter notebooks</a> regularly in your machine learning or data science projects? Did you know that you can work on notebooks inside a free cloud-based environment with a GPU accelerator? In this post, I will introduce you to <a href="https://colab.research.google.com">Google Colaboratory</a> and show you in a few simple steps how to integrate this platform into your daily workflow.</p>
 
-<p></p>
+<p>
 
-<p>As I have mentioned in my previous posts, I have been implementing constrained density functional theory (CDFT) features into the <a href="https://cp2k.org">CP2K quantum chemistry code</a> over the past 18 months. Up till now, I unfortunately haven&rsquo;t had the time to write a proper tutorial to describe how to use these features. New users wanting to test out the CDFT capabilities have had to rely on the examples in the <a href="https://github.com/cp2k/cp2k/tree/master/cp2k/tests/QS">CP2K regtest directories</a>, which do cover all implemented features, but are very artificial and don&rsquo;t produce truly converged results because they are meant to run fast. But now everything is about to change!</p>
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
 
-<p>I am attending the 2018 CP2K UK User meeting in Lincoln in three weeks, where I will be giving a introductory how-to talk on CDFT. As part of preparing my presentation to the event, I will also be writing a proper CDFT tutorial with realistic examples partly taken from the <a href="https://dx.doi.org/10.1021/acs.jctc.6b01085">implementation paper</a>. The tutorial will be added to the <a href="https://www.cp2k.org/howto:cdft">CP2K howto pages</a>. I will post a link to the presentation slides once I return from Lincoln in a separate post.</p>
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
 
-<p>If you are a UK based student and you would like to learn more about CP2K, the registration to the 2018 CP2K User meeting is still open. The event is free to everyone and UK academics can get their travel costs fully reimbursed. Happy holidays to everyone and hope to see you in Lincoln in January!</p>
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://res.cloudinary.com/nholmber/image/upload/v1536751563/jupyter_colab_small_axbdcm.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="https://res.cloudinary.com/nholmber/image/upload/v1536751563/jupyter_colab_small_axbdcm.png" >
+  
+    </a>
+  
+  
+</div>
+
+  <div style="clear:both;"></div>
+</p>
+
+<p>Jupyter notebooks are web-based interactive computational environments that have become a powerful and flexible tool to, e.g., teach computer and data science. Other use cases where you often might encounter Jupyter notebooks are machine learning or deep learning projects, which can be completed entirely from start to finish within a notebook environment. If you&rsquo;re still unfamiliar with Jupyter notebooks or believe that a refresher would be in order, I would highly recommend you to check out these two tutorials by <a href="https://arogozhnikov.github.io/2016/09/10/jupyter-features.html">Alex Rogozhnikov</a> and <a href="https://www.dataquest.io/blog/jupyter-notebook-tutorial/">Benjamin Pryke</a>, which give a broad overview of the capabilities of Jupyter notebooks and help you get started on building your first notebook.</p>
+
+<p>In addition to the examples that I highlighted above, Jupyter notebooks have also become a popular interface to commercial cloud-based computing services. Google Colaboratory, or Colab for short, is a free cloud platform that you can access through a browser to work on notebooks. You might have encountered Google Colab before if you have recently been reading the <a href="https://tensorflow.org">TensorFlow</a> documentation. According to the development team behind Colab, the goal of the project is to enable easier sharing of notebooks in a collaborative environment in an effort to advance machine learning education and research. When you use Google Colab, a GPU-accelerated virtual machine is fired up on demand as soon as you want to evaluate code in your notebook. The platform could, therefore, prove helpful in accelerating computational intensive parts of your projects, say if you&rsquo;re normally working on a laptop without access to a more powerful machine.</p>
+
+<p>I&rsquo;ve decided to try out something new in this post which I&rsquo;ve divided into two main sections. I&rsquo;ll first discuss cloud-based computing services in a more general setting because I believe that we are heading towards a future where such services will play an increasingly important role. I will then present a short introduction to Google Colab, which should be more than sufficient to get you started on your first project on the platform. After reading this post, you should become familiar with the prospects of <a href="https://en.wikipedia.org/wiki/Cloud_computing">cloud computing services</a>, and you should be able to decide whether Google Colab is an environment that could benefit you in your day-to-day workflow.</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://cdn.pixabay.com/photo/2017/01/22/22/11/cloud-computing-2001090_960_720.jpg" data-fancybox-group="">
+  
+    <img class="fig-img" src="https://cdn.pixabay.com/photo/2017/01/22/22/11/cloud-computing-2001090_960_720.jpg" >
+  
+    </a>
+  
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<h1 id="cloud-computing-the-inevitable-future-of-data-intensive-workflows">Cloud Computing: The Inevitable Future of Data Intensive Workflows?</h1>
+
+<p>Let me start off this post with a digression from today&rsquo;s main topic by sharing with you my views on how compute-intensive fields of data science are evolving towards a computing-as-a-service model. This section is completely optional if you&rsquo;re only interested in learning how to use Google Colab, though I would very much appreciate it if you decided to stick around. At the end of this section, I hope that I have succeeded in convincing you on the reasons why I believe data scientists, deep learning researchers, and machine learning engineers alike should get accustomed to Google Colab and other cloud-based services.</p>
+
+<p>In many respects, we are in the midst of a paradigm shift in the way we use computers and computing resources for data science. As more and more data continues to become available to us, our demand for more powerful and faster computers keeps growing so that we are able to efficiently utilize the data to, e.g., make predictions or understand trends. At the same time, we want our personal machines to be light, portable, and have enough battery life to be able to survive through an 8-hour working day effortlessly. These are both aspects that high-performance <a href="https://en.wikipedia.org/wiki/Cloud_computing">cloud computing services</a> can solve, and if you were to ask me, this is the inevitable outcome that we are headed towards in the future, at least in fields that require extensive computational resources especially if the demand is intermittent.</p>
+
+<p>The simplest service cloud companies can offer is infrastructure. Very broadly speaking, this involves giving end users on-demand, over-the-Internet access to interconnected computer clusters and servers with dedicated storage and other auxiliary facilities. Nowadays, cloud computing services have evolved beyond infrastructural services as cloud companies have started diversifying towards more comprehensive platforms that offer tools and applications for a wider customer base, not just data science experts. For example, <a href="https://cloud.google.com/">Google</a> and <a href="https://azure.microsoft.com/en-us/">Microsoft</a> both currently provide a variety of tools ranging from productivity software (e.g. office software) to machine learning tools in their respective cloud application portfolios. Customer service and, in particular, software expertise are also services worth mentioning. To give you a broader overview of the cloud computing service model, I find this image from <a href="https://en.wikipedia.org/wiki/Cloud_computing">Wikipedia</a> illustrates the main concepts rather well&ndash;I would strongly encourage you to check out the link to the main article if you want further information.</p>
+
+<p>
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://upload.wikimedia.org/wikipedia/commons/3/3c/Cloud_computing_layers.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Cloud_computing_layers.png" >
+  
+    </a>
+  
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+<span class="caption">Hierarchical cloud computing service model. Image credit: <a href="https://en.wikipedia.org/wiki/Cloud_computing">Wikipedia</a>.</span></p>
+
+<p>The paradigm shift towards centralized computing is by no means a recent development. This a topic that is, in my opinion, best viewed from a historical perspective. The foundations of centralized computing can be dated back to the <a href="https://en.wikipedia.org/wiki/Manhattan_Project">Manhattan project</a> and the development of the <a href="https://en.wikipedia.org/wiki/ENIAC">first supercomputers</a>. Although these <a href="https://en.wikipedia.org/wiki/Supercomputer">supercomputers</a> were very modest by modern standards (and aren&rsquo;t usually even classified as supercomputers), their development was a momentous event that sparked the &ldquo;computer age&rdquo; in scientific research because these machines were successful in demonstrating that simulations could be a viable tool for research and development. Today, broad leaps in computing power and algorithms have cemented the role of numerical simulations in scientific research, e.g., within the field of chemistry. Reflecting back on my past four years as a Ph.D. candidate in this field, I am confident that the role computer simulations in research will continue growing in the upcoming decades&ndash;a trend that has largely been catalyzed by the rapid development of faster and faster supercomputers. The <a href="https://www.top500.org/">Top500 project</a> website is an excellent source of information if want to learn more about where supercomputers and the field of high-performance computing are headed in the future.</p>
+
+<p>
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://res.cloudinary.com/nholmber/image/upload/v1536751563/sisu_frp45v.jpg" data-fancybox-group="">
+  
+    <img class="fig-img" src="https://res.cloudinary.com/nholmber/image/upload/v1536751563/sisu_frp45v.jpg" >
+  
+    </a>
+  
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+<span class="caption">Finland&#39;s current flagship supercomputer <a href="https://www.csc.fi/-/csc-n-sisu-supertietokone-euroopan-nopeimpien-joukkoon">Sisu</a>, which belongs to the <a href="https://www.cray.com/products/computing/xc-series">Cray XC40</a> family. Image credit: Cray Inc.</span></p>
+
+<p>Historically, the adoption of centralized computing services outside of academic and governmental research has not been as quick. I would argue that this is a classic case of a supply-and-demand problem: the majority of companies haven&rsquo;t seen a demand for more computing infrastructure or other cloud-based services, so the number of companies offering such services has remained limited. Those companies that were the rare exceptions and required more resources than local workstations could offer usually had to resort to on-site operated computer clusters. The ongoing artificial intelligence and machine learning boom has awakened companies to the prospects of computer modeling and data science. The growing demand for commercial cloud-based services has, in turn, attracted a large array of companies to the market, which have skyrocketed in numbers since the mid-2000s when <a href="https://aws.amazon.com/ec2/">Amazon</a> introduced their EC2 platform.</p>
+
+<p>I view this trend towards the greater use of cloud-based services as beneficial both from the vantage point of companies and private individuals, the collective &ldquo;end users&rdquo;. Buying, operating, and maintaining computing infrastructure (hardware and software) is expensive in terms of acquisition and labor costs. In a cloud computing setting, these costs are shared among all end users which brings down the total cost on an average basis. Cloud providers naturally take a cut from the operating income as profit, as they are fully entitled to do. The competition between peers should help prevent cost escalation and ultimately spur the development of better cloud services and platforms. Another benefit of cloud computing platforms is the fact that they make machine learning and other data science techniques more accessible to everyone because you no longer need to own your own machine or be a software guru in order to efficiently use the computational tools. The growth and diversification of the userbase will also lead to new exciting method applications, which will help guide software development in the future. As the cloud computing scene matures, it will be interesting to see what kind of balance will be reached between the use of commercial and open source software.</p>
+
+<p>
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://res.cloudinary.com/nholmber/image/upload/v1536751564/colab_welcome_j1jxvs.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="https://res.cloudinary.com/nholmber/image/upload/v1536751564/colab_welcome_j1jxvs.png" >
+  
+    </a>
+  
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+<span class="caption"><a href="https://colab.research.google.com">Google Colaboratory</a>&ndash;a cloud-based environment for Jupyter notebooks.</span></p>
+
+<h1 id="getting-started-with-google-colaboratory">Getting Started with Google Colaboratory</h1>
+
+<p>I hope that my discussion in the preceding section has managed to convince you why learning to use cloud-based tools is worth your time. We are now ready to move on to the main topic of this post, namely, how to use Google Colab as an interactive cloud-based Jupyter notebook environment.</p>
+
+<p>Getting started with Google Colab is very simple: the front-page itself is an introductory notebook that will familiarize you with the platform. You can access a couple of additional tutorials by selecting <code>File &gt; Open &gt; Examples</code>. Evaluating code inside notebooks does not cost anything when you use Google Colab, and only requires you to sign in with your Google account. Behind the scenes, Google Colab is a non-persistent virtual machine hosted on Google Cloud, which is something you should keep in mind when using the platform as I&rsquo;ll explain shortly. Numerical computations in Google Colab can be accelerated using a GPU backend on supported machine learning frameworks, again without incurring any cost. This a very appealing option if you&rsquo;re like me and regularly work on a laptop without access to a machine with a dedicated GPU and you want to, e.g., reduce the training time of a TensorFlow model that you&rsquo;re building.</p>
+
+<p>Once you&rsquo;re done with the introductory Colab tutorials, you can continue to explore the platform by opening an example notebook from the Colab-powered <a href="https://tools.google.com/seedbank/">Seedbank database</a>, which contains notebooks that cover a wide range of machine learning topics. Alternatively, you may start working on your own notebook either by creating from one scratch or by importing an existing one into Colab. You have three choices on how you can import a notebook if you select the <code>File &gt; Open</code> dialog:</p>
+
+<p><strong>Option 1.</strong> You can import a notebook directly from GitHub by searching notebooks on a per-user and per-repository basis. You have another option if you know the URL to a GitHub-hosted notebook. You can simply strip the <code>https://www.</code> part from the GitHub URL and prepend it with <code>colab.research.google.com/</code> to open up the notebook directly. I&rsquo;ve included an example link below to a notebook that I prepared specifically for this post, which you&rsquo;re more than welcome to check out. I adapted the notebook from one of the exercise notebooks that are a part of the <a href="https://cs231n.github.io/">Stanford University convolutional neural networks class</a> by making the notebook Google Colab compatible.</p>
+
+<p><a href="https://colab.research.google.com/github/nholmber/google-colab-cs231n/blob/master/assignment1/knn.ipynb">https://colab.research.google.com/github/nholmber/google-colab-cs231n/blob/master/assignment1/knn.ipynb</a></p>
+
+<p><strong>Option 2.</strong> Import a notebook from Google Drive.</p>
+
+<p><strong>Option 3.</strong> Upload a local file from your computer.</p>
+
+<p>I mentioned earlier that the allocated computing resources are non-persistent when you use the Google Colab notebook environment. This means that you will permanently lose any unsaved work once the resource allocation expires (12 hours). Don&rsquo;t worry, saving your notebook or your trained machine learning model are both straightforward once you get the hang of things. The notebook is the simplest thing to save: just hit the save button and a copy of the notebook will be stored in a new folder on your Google Drive. Exporting the notebook to GitHub as a commit (you must first grant Google Colab the privileges to do so) or downloading it to your computer are alternative options that you can select from the <code>File</code> dialog.</p>
+
+<p>Saving a trained model or outputting any other data takes a couple of extra steps. You again have a couple of choices on how you can save the data. Note that these same instructions also work in case you want to import data or a model into the Google Colab environment.</p>
+
+<p><strong>Option 1.</strong> You have access to the command line in a Jupyter notebook. You can use the command line to clone a git repository in order to push or pull data from a remote repository. Here&rsquo;s an example how you can pull Python dependencies and input data into a Google Colab notebook.</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right" >
+  
+    <a class="fancybox" href="https://res.cloudinary.com/nholmber/image/upload/v1536672214/colab_combined_flattened_fy10jm.png" title="Importing data to Google Colab through a GitHub repository." data-fancybox-group="">
+  
+    <img class="fig-img" src="https://res.cloudinary.com/nholmber/image/upload/v1536672214/colab_combined_flattened_fy10jm.png"  alt="Importing data to Google Colab through a GitHub repository.">
+  
+    </a>
+  
+   
+    <span class="caption">Importing data to Google Colab through a GitHub repository.</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p><strong>Option 2.</strong> As an alternative to a remote git repository, you can mount Google Drive as a folder that you can access for storing and retrieving data. You can follow the instructions in this <a href="https://medium.com/deep-learning-turkey/google-colab-free-gpu-tutorial-e113627b9f5d">post</a> if you are interested in this option.</p>
+
+<p><strong>Option 3.</strong> You can upload or download files directly from or to your computer with Python. You can find the instructions in this <a href="https://colab.research.google.com/notebooks/io.ipynb">tutorial notebook</a>, which also discusses some alternative options in addition to the options 1-3 that I have introduced here.</p>
+
+<h1 id="further-reading">Further Reading</h1>
+
+<p>You should now be ready to use Google Colab in your own projects. I&rsquo;ve intentionally kept the tutorial portion of my post quite compact because, at the end of the day, using the environment is meant to be relatively easy and unobtrusive. The actual challenge is, of course, creating the notebook that you need to complete your project. If you nevertheless feel that this post was too brief and did not cover Google Colab adequately enough, you might find the following articles worth reading</p>
+
+<ul>
+<li><a href="https://medium.com/deep-learning-turkey/google-colab-free-gpu-tutorial-e113627b9f5d">Tutorial by fuat</a></li>
+<li><a href="https://blog.goodaudience.com/train-a-keras-neural-network-with-imagenet-synsets-in-google-colaboratory-e68dc4fd759f">Tuturial by Sebastian Norena</a></li>
+</ul>
+
+<hr />
+
+<p>Congratulations, you&rsquo;ve reached the end of this post. As I mentioned earlier, I decided to test something new in this post by first introducing cloud computing services as broader background to Google Colab, followed by a short how-to tutorial. What did you think about this approach? Would you have preferred two separate posts with more substance in each? I&rsquo;d love to read your comments and your thoughts on cloud computing.</p>
               
             </div>
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
-              
-                
-                
-                  <div class="post-footer-tags">
-                    <span class="text-color-light text-small">TAGGED IN</span><br/>
-                    
-  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/cp2k/">CP2K</a>
-
-  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/tutorial/">tutorial</a>
-
-  <a class="tag tag--primary tag--small" href="https://nholmber.github.io/tags/how-to/">how-to</a>
-
-                  </div>
-                
               
             
             
@@ -276,7 +571,7 @@ ga('send', 'pageview');
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://nholmber.github.io/2018/01/cp2k-uk-2018-recap/" data-tooltip="A recap of the CP2K-UK 2018 meeting">
+                <a class="post-action-btn btn btn--disabled">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -284,7 +579,7 @@ ga('send', 'pageview');
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/" data-tooltip="Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nholmber.github.io/2018/08/gmaps-statistics/" data-tooltip="Visualizing Geographic Statistical Data with Google Maps">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -302,19 +597,19 @@ ga('send', 'pageview');
         </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nholmber.github.io/2017/12/cp2k-uk-2018/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nholmber.github.io/2018/09/google-colab/">
               <i class="fa fa-facebook-official"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nholmber.github.io/2017/12/cp2k-uk-2018/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nholmber.github.io/2018/09/google-colab/">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nholmber.github.io/2017/12/cp2k-uk-2018/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nholmber.github.io/2018/09/google-colab/">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -390,7 +685,7 @@ ga('send', 'pageview');
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://nholmber.github.io/2018/01/cp2k-uk-2018-recap/" data-tooltip="A recap of the CP2K-UK 2018 meeting">
+                <a class="post-action-btn btn btn--disabled">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -398,7 +693,7 @@ ga('send', 'pageview');
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://nholmber.github.io/2017/12/mpi-io-cube-pt2/" data-tooltip="Parallelizing I/O operations with MPI, Part 2: Performance tuning and Cray Burst Buffer">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://nholmber.github.io/2018/08/gmaps-statistics/" data-tooltip="Visualizing Geographic Statistical Data with Google Maps">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -416,19 +711,19 @@ ga('send', 'pageview');
         </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nholmber.github.io/2017/12/cp2k-uk-2018/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://nholmber.github.io/2018/09/google-colab/">
               <i class="fa fa-facebook-official"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nholmber.github.io/2017/12/cp2k-uk-2018/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://nholmber.github.io/2018/09/google-colab/">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
         
           <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nholmber.github.io/2017/12/cp2k-uk-2018/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://nholmber.github.io/2018/09/google-colab/">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -458,19 +753,19 @@ ga('send', 'pageview');
   <ul class="share-options">
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnholmber.github.io%2F2017%2F12%2Fcp2k-uk-2018%2F">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnholmber.github.io%2F2018%2F09%2Fgoogle-colab%2F">
           <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fnholmber.github.io%2F2017%2F12%2Fcp2k-uk-2018%2F">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fnholmber.github.io%2F2018%2F09%2Fgoogle-colab%2F">
           <i class="fa fa-twitter"></i><span>Share on Twitter</span>
         </a>
       </li>
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fnholmber.github.io%2F2017%2F12%2Fcp2k-uk-2018%2F">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fnholmber.github.io%2F2018%2F09%2Fgoogle-colab%2F">
           <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
         </a>
       </li>
@@ -743,9 +1038,9 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'https:\/\/nholmber.github.io\/2017\/12\/cp2k-uk-2018\/';
+          this.page.url = 'https:\/\/nholmber.github.io\/2018\/09\/google-colab\/';
           
-            this.page.identifier = '\/2017\/12\/cp2k-uk-2018\/'
+            this.page.identifier = '\/2018\/09\/google-colab\/'
           
         };
         (function() {

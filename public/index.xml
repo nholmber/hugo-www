@@ -6,10 +6,19 @@
     <description>Recent content on Nico Holmberg</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 09 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 12 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://nholmber.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Integrating Google Colaboratory into Your Machine Learning Workflow</title>
+      <link>https://nholmber.github.io/2018/09/google-colab/</link>
+      <pubDate>Wed, 12 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/2018/09/google-colab/</guid>
+      <description>&lt;p&gt;Are you using &lt;a href=&#34;https://jupyter.org&#34;&gt;Jupyter notebooks&lt;/a&gt; regularly in your machine learning or data science projects? Did you know that you can work on notebooks inside a free cloud-based environment with a GPU accelerator? In this post, I will introduce you to &lt;a href=&#34;https://colab.research.google.com&#34;&gt;Google Colaboratory&lt;/a&gt; and show you in a few simple steps how to integrate this platform into your daily workflow.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Visualizing Geographic Statistical Data with Google Maps</title>
