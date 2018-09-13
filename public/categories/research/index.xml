@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Research on Nico Holmberg</title>
+    <link>https://nholmber.github.io/categories/research/</link>
+    <description>Recent content in Research on Nico Holmberg</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 13 Sep 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://nholmber.github.io/categories/research/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Research Update: September 2018</title>
+      <link>https://nholmber.github.io/2018/09/research-update/</link>
+      <pubDate>Thu, 13 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://nholmber.github.io/2018/09/research-update/</guid>
+      <description>&lt;p&gt;The arrival of a new batch of freshmen is a sure sign of autumn and the start of a new academic semester. I am thrilled to announce that this semester should also be my last one as a Ph.D. candidate because I officially submitted my dissertation for preliminary examination last week. In this post, I will look back on summer 2018 and recap the research projects that I completed during that time.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
