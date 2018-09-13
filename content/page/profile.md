@@ -11,6 +11,7 @@ slug : "profile"
 
 ---
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css">
 <center>
   ![Nico Holmberg][profile]
   **Doctoral Student**<br/>
@@ -22,9 +23,10 @@ slug : "profile"
   &nbsp;    [<i class="fab fa-github fa-lg" style="color:#211F1F"></i>](https://github.com/nholmber "GitHub Profile")
   &nbsp;    [<i class="fab fa-medium fa-lg" style="color:#000000"></i>](https://medium.com/@nholmber "Medium Profile")
   &nbsp;    [<img src="https://d2fltix0v2e0sb.cloudfront.net/dev-badge.svg" alt="Nico Holmberg's DEV Profile" height="20" width="20" style="vertical-align:text-top; display:inline" />](https://dev.to/nholmber "Nico Holmberg's DEV Profile")
+  &nbsp;    [<i class="ai ai-google-scholar ai-lg" style="color:#4885ed"></i>](https://scholar.google.com/citations?user=fZ7iHAIAAAAJ&hl=en "Google Scholar Profile")
   &nbsp;    [<i class="fas fa-user fa-lg" style="color:#08b470ff"></i>](https://research.aalto.fi/portal/nico.holmberg.html "Public Researcher Profile")
   &nbsp;    [<i class="fab fa-twitter fa-lg" style="color:#00aced"></i>](https://twitter.com/nholmber_ "Twitter Profile")
-  &nbsp;    [<i class="fas fa-globe-americas fa-lg" style="color:#08b470ff"></i>](http://cmat.aalto.fi/en/research_groups/computational_chemistry/laasonen/ "Research Group Website")
+  &nbsp;    [<i class="fas fa-globe-americas fa-lg" style="color:#08b470ff"></i>](https://cmat.aalto.fi/en/research_groups/computational_chemistry/laasonen/ "Research Group Website")
   &nbsp;    [<img src="https://orcid.org/sites/default/files/images/orcid_24x24.png" style="vertical-align:text-top; display:inline" />](https://orcid.org/0000-0001-5575-7332 "Orcid Researcher Profile")
 
 </center>
@@ -57,9 +59,10 @@ Find out more on [<i class="fab fa-linkedin-square fa-lg" style="color:#0077B5">
 
 # Latest Peer-Reviewed Publication
 
-- **Holmberg, Nico**; Laasonen, Kari; *Efficient Constrained Density Functional Theory Implementation for Simulation of Condensed Phase Electron Transfer Reactions*, Journal of Chemical Theory and Computation, 13 (2017), pp 587--601, [online link](https://dx.doi.org/10.1021/acs.jctc.6b01085).
+- **Holmberg, Nico**; Laasonen, Kari; *Diabatic model for electrochemical hydrogen evolution based on constrained DFT configuration interaction*, The Journal of Chemical Physics, 149 (2018), 104702, [online link](https://doi.org/10.1063/1.5038959).
 
 An exhaustive list of publications with downloadable copies are available on
+&nbsp;    [<i class="ai ai-google-scholar ai-lg" style="color:#4885ed"></i>](https://scholar.google.com/citations?user=fZ7iHAIAAAAJ&hl=en "Google Scholar Profile")
 &nbsp;    [<i class="fas fa-user fa-lg" style="color:#08b470ff"></i>](https://research.aalto.fi/portal/nico.holmberg.html "Public Researcher Profile")
 &nbsp;    [<img src="https://orcid.org/sites/default/files/images/orcid_24x24.png" style="vertical-align:text-top; display:inline" />](https://orcid.org/0000-0001-5575-7332 "Orcid Researcher Profile")
 
