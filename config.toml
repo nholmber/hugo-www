@@ -19,8 +19,8 @@ canonifyurls = true
 
 [author]
   name = "Nico Holmberg"
-  bio = "Soon-to-be PhD in Computational Chemistry Eager to Develop Machine Learning Skills, Tech Enthusiast"
-  job = "Doctoral Student, Computational Chemistry"
+  bio = "PhD in Computational Chemistry,</br>AI and Tech Enthusiast"
+  job = "Machine Learning Data Scientist,</br>Top Data Science Ltd"
   location = "Espoo, Finland"
   picture = "https://res.cloudinary.com/nholmber/image/upload/v1533803085/img-600x600_buh1cy.png"
   twitter = "nholmber_"
@@ -28,42 +28,64 @@ canonifyurls = true
 
 # Menu Configuration
 [[menu.main]]
-  weight = 2
+  weight = 1
   identifier = "home"
   name = "Home"
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-home\"></i>"
   url = "/"
 [[menu.main]]
-  weight = 4
+  weight = 5
   identifier = "categories"
   name = "Categories"
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-bookmark\"></i>"
   url = "/categories"
 [[menu.main]]
-  weight = 5
+  weight = 6
   identifier = "tags"
   name = "Tags"
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-tags\"></i>"
   url = "/tags"
 [[menu.main]]
-  weight = 3
+  weight = 4
   identifier = "archives"
   name = "Archives"
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-archive\"></i>"
   url = "/archives"
 [[menu.main]]
-  weight = 1
+  weight = 2
   identifier = "profile"
   name = "Profile"
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-user\"></i>"
   url = "/profile"
 
+[[menu.main]]
+  weight = 3
+  identifier = "publications"
+  name = "Publications"
+  pre = "<i class=\"sidebar-button-icon fa fa-lg fa-book\"></i>"
+  url = "/publications"
+
+
 [[menu.links]]
-  weight = 0
+  weight = 1
+  identifier = "linkedin"
+  name = "LinkedIn"
+  pre = "<i class=\"sidebar-button-icon fab fa-lg fa-linkedin\"></i>"
+  url = "(https://www.linkedin.com/in/nicoholmberg/"
+
+[[menu.links]]
+  weight = 2
   identifier = "github"
   name = "GitHub"
-  pre = "<i class=\"sidebar-button-icon fa fa-lg fa-github\"></i>"
+  pre = "<i class=\"sidebar-button-icon fab fa-lg fa-github\"></i>"
   url = "https://github.com/nholmber"
+
+[[menu.links]]
+  weight = 3
+  identifier = "gitlab"
+  name = "GitLab"
+  pre = "<i class=\"sidebar-button-icon fab fa-lg fa-gitlab\"></i>"
+  url = "https://gitlab.com/nholmber"
 #[[menu.links]]
 #  weight = 1
 #  identifier = "stackoverflow"
